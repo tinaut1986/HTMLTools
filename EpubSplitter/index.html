@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divisor de Texto XHTML</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Divisor de Texto XHTML</h1>
+        
+        <div class="input-section">
+            <label for="inputText">Texto de entrada (XHTML) - <span id="charCount">0</span> caracteres:</label>
+            <textarea id="inputText" placeholder="Ingrese su texto XHTML aquí..."></textarea>
+        </div>
+
+        <div class="input-section">
+            <label for="maxChars">Número máximo de caracteres por grupo:</label>
+            <input type="number" id="maxChars" value="500">
+        </div>
+
+        <div class="button-group">
+            <label for="fileInput" class="button upload-button">
+                <span class="icon">⬆️</span> Cargar texto desde archivo
+            </label>
+            <input type="file" id="fileInput" accept=".txt,.xml,.html,.xhtml" class="hidden">
+            <button id="downloadTranslations" class="button download-button">
+                <span class="icon">⬇️</span> Guardar traducciones en archivo
+            </button>
+            <button id="resetAll" class="button reset-button">
+                <span class="icon">🗑️</span> Limpiar todo
+            </button>
+        </div>
+
+        <div id="splitTextsContainer"></div>
+
+        <div class="button-group">
+            <button id="copyAllOriginal" class="button copy-button">
+                <span class="icon">📋</span> Copiar todos los textos originales
+            </button>
+            <button id="copyAllTranslations" class="button copy-button">
+                <span class="icon">📋</span> Copiar todas las traducciones
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

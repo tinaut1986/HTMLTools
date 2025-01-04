@@ -1,0 +1,145 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-section {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+textarea, input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+textarea {
+    height: 150px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.upload-button {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.download-button {
+    background-color: #9c27b0;
+    color: #fff;
+}
+
+.reset-button {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.copy-button {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+.button .icon {
+    margin-right: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.card {.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.card.error {
+    border-color: #f44336;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-section {
+    width: 48%;
+}
+
+.text-section textarea {
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.highlighted-text {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+mark {
+    background-color: #ffcccb;
+}
+
+.copied {
+    background-color: #4caf50 !important;
+}
+
+@media (max-width: 768px) {
+    .card-content {
+        flex-direction: column;
+    }
+
+    .text-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+

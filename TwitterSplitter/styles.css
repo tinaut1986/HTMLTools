@@ -1,0 +1,128 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --btn-bg: #4CAF50;
+    --btn-text: #ffffff;
+    --btn-hover: #45a049;
+    --input-bg: #f8f8f8;
+    --input-border: #cccccc;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.icon-btn:hover {
+    background-color: var(--input-bg);
+    border-radius: 50%;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+textarea, input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 15px;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: var(--btn-hover);
+}
+
+.output-item {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.output-text {
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+}
+
+.copy-btn {
+    background-color: transparent;
+    color: var(--btn-bg);
+    border: 1px solid var(--btn-bg);
+}
+
+.copy-btn:hover {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+}
+
+#copyAllBtn {
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    --bg-color: #333333;
+    --text-color: #ffffff;
+    --btn-bg: #4CAF50;
+    --btn-text: #ffffff;
+    --btn-hover: #45a049;
+    --input-bg: #444444;
+    --input-border: #555555;
+}
+
+

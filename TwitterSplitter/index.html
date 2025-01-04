@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divisor de Texto</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Divisor de Texto <button id="darkModeToggle" class="btn icon-btn">
+            <span class="material-icons">dark_mode</span>
+        </button></h1>
+        <button id="copyAllBtn" class="btn" style="display: none;">
+            <span class="material-icons">content_copy</span>
+            Copiar Todo
+        </button>
+        <div class="input-group">
+            <textarea id="inputText" placeholder="Ingrese su texto aquí"></textarea>
+            <div class="controls">
+                <input type="number" id="charLimit" min="1" value="100" placeholder="Límite de caracteres">
+                <button id="divideBtn" class="btn">
+                    <span class="material-icons">content_cut</span>
+                    Dividir
+                </button>
+            </div>
+        </div>
+        <div id="output"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
