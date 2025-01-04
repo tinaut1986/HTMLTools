@@ -191,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateCharCount();
         splitText();
+        loadDarkModePreference(); // Added line from update 2
     }
 
     inputText.addEventListener('input', function() {
@@ -227,11 +228,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     resetAll.addEventListener('click', function() {
+        // Save the current darkMode value
+        const darkMode = localStorage.getItem('darkMode');
+
+        // Clear input text
         inputText.value = '';
+
+        // Reset translations array
         translations = [];
+
+        // Update character count
         updateCharCount();
+
+        // Clear split text
         splitText();
+
+        // Clear entire localStorage
         localStorage.clear();
+
+        // Restore darkMode configuration if it existed
+        if (darkMode !== null) {
+            localStorage.setItem('darkMode', darkMode);
+        }
     });
 
     splitTextsContainer.addEventListener('input', function(e) {
@@ -273,5 +291,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load saved data on initial load
     loadFromLocalStorage();
-});
 
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    function loadDarkModePreference() {
+        const darkMode = localStorage.getItem('darkMode');
+        if (darkMode === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    }
+    
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    
+    // Cargar la preferencia de modo oscuro al inicio
+    loadDarkModePreference();
+});

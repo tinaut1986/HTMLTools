@@ -31,18 +31,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function divideText(text, limit) {
-        const words = text.split(' ');
+        // Split the text into lines
+        const lines = text.split(/\r?\n/);
         const subtexts = [];
         let currentSubtext = '';
 
-        for (const word of words) {
-            if ((currentSubtext + word).length > limit) {
-                subtexts.push(currentSubtext.trim());
-                currentSubtext = '';
+        for (const line of lines) {
+            // Split each line into words
+            const words = line.split(' ');
+
+            for (const word of words) {
+                // Check if adding the word exceeds the limit
+                if ((currentSubtext + word).length > limit) {
+                    // If so, push the current subtext and start a new one
+                    subtexts.push(currentSubtext.trim());
+                    currentSubtext = '';
+                }
+                // Add the word to the current subtext
+                currentSubtext += word + ' ';
             }
-            currentSubtext += word + ' ';
+
+            // Add a newline character after processing each line
+            if (currentSubtext.trim()) {
+                currentSubtext = currentSubtext.trim() + '\n';
+            }
         }
 
+        // Push the last subtext if it's not empty
         if (currentSubtext.trim()) {
             subtexts.push(currentSubtext.trim());
         }

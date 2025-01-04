@@ -81,7 +81,7 @@ textarea {
     display: none;
 }
 
-.card {.card {
+.card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -143,3 +143,83 @@ mark {
     }
 }
 
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+body.dark-mode .card {
+    background-color: #2a2a2a;
+    border-color: #444;
+}
+
+body.dark-mode textarea,
+body.dark-mode input[type="number"] {
+    background-color: #333;
+    color: #f0f0f0;
+    border-color: #555;
+}
+
+body.dark-mode .button {
+    background-color: #444;
+    color: #f0f0f0;
+}
+
+body.dark-mode .upload-button {
+    background-color: #8f6f00;
+    color: #f0f0f0;
+}
+
+body.dark-mode .download-button {
+    background-color: #4a0e54;
+    color: #f0f0f0;
+}
+
+body.dark-mode .reset-button {
+    background-color: #7a1c1c;
+    color: #f0f0f0;
+}
+
+body.dark-mode .copy-button {
+    background-color: #0d47a1;
+    color: #f0f0f0;
+}
+
+body.dark-mode .error-message {
+    background-color: #4a0e0e;
+    color: #ffcccb;
+}
+
+body.dark-mode .highlighted-text {
+    background-color: #333;
+}
+
+body.dark-mode mark {
+    background-color: #4a0e0e;
+    color: #ffcccb;
+}
+
+body.dark-mode .dark-mode-toggle {
+    color: #f0f0f0;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
