@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Solar 3D - Lunas con Órbitas (v4 - Seguimiento Orbital)</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background-color: #000; color: #fff; }
-        canvas { display: block; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        canvas {
+            display: block;
+        }
+
         #infoPanel {
             position: absolute;
             top: 10px;
             left: 10px;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border-radius: 5px;
             color: #fff;
             max-width: 300px;
             font-size: 0.9em;
         }
-        #infoPanel h3 { margin-top: 0; }
-        #infoPanel p { margin: 5px 0; }
-        .lil-gui { --font-size: 14px; --width: 280px; }
+
+        #infoPanel h3 {
+            margin-top: 0;
+        }
+
+        #infoPanel p {
+            margin: 5px 0;
+        }
+
+        .lil-gui {
+            --font-size: 14px;
+            --width: 280px;
+        }
     </style>
 </head>
+
 <body>
     <div id="infoPanel">
         <h3>Sistema Solar Interactivo</h3>
@@ -55,22 +77,30 @@
         const planetData = [
             { name: "Mercurio", radius: 2440, distance: 0.39 * AU, period: 88, rotationPeriod: 1408, color: 0x8c8c8c, texture: "https://upload.wikimedia.org/wikipedia/commons/9/92/Solarsystemscope_texture_2k_mercury.jpg" },
             { name: "Venus", radius: 6052, distance: 0.72 * AU, period: 225, rotationPeriod: -5832, color: 0xffe0b3, texture: "https://upload.wikimedia.org/wikipedia/commons/4/40/Solarsystemscope_texture_2k_venus_surface.jpg" },
-            { name: "Tierra", radius: 6371, distance: 1 * AU, period: 365, rotationPeriod: 24, color: 0x0077ff, texture: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Solarsystemscope_texture_2k_earth_daymap.jpg", moons: [
-                { name: "Luna", radius: 1737, distance: 0.384, period: 27.3, texture: "https://upload.wikimedia.org/wikipedia/commons/1/1f/Solarsystemscope_texture_2k_moon.jpg" }
-            ]},
-            { name: "Marte", radius: 3390, distance: 1.52 * AU, period: 687, rotationPeriod: 24.6, color: 0xff5733, texture: "https://upload.wikimedia.org/wikipedia/commons/4/46/Solarsystemscope_texture_2k_mars.jpg", moons: [
-                { name: "Fobos", radius: 11.1, distance: 0.009377, period: 0.319, color: 0x5c5c5c },
-                { name: "Deimos", radius: 6.2, distance: 0.02346, period: 1.262, color: 0x7f7f7f }
-            ]},
-            { name: "Júpiter", radius: 69911, distance: 5.2 * AU, period: 4333, rotationPeriod: 9.9, color: 0xffca80, texture: "https://upload.wikimedia.org/wikipedia/commons/b/be/Solarsystemscope_texture_2k_jupiter.jpg", moons: [
-                { name: "Ío", radius: 1821, distance: 0.421700, period: 1.77, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Io_highest_resolution_true_color.jpg/1024px-Io_highest_resolution_true_color.jpg" },
-                { name: "Europa", radius: 1560, distance: 0.671100, period: 3.55, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Europa_map_from_Galileo_and_Voyager_data.jpg/1024px-Europa_map_from_Galileo_and_Voyager_data.jpg" },
-                { name: "Ganimedes", radius: 2634, distance: 1.070400, period: 7.15, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Ganymede_by_Galileo_%E0%A4%9D%E0%A5%82%E0%A4%B2%E0%A5%87%E0%A4%B2%E0%A4%BE%E0%A4%B2.jpg/1024px-Ganymede_by_Galileo_%E0%A4%9D%E0%A5%82%E0%A4%B2%E0%A5%87%E0%A4%B2%E0%A4%BE%E0%A4%B2.jpg" },
-                { name: "Calisto", radius: 2410, distance: 1.882700, period: 16.69, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Callisto_map_mosaics_Voyager_Galileo_%E0%A4%A8%E0%A4%B9%E0%A5%8B%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A4%B9.png/1024px-Callisto_map_mosaics_Voyager_Galileo_%E0%A4%A8%E0%A4%B9%E0%A5%8B%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A4%B9.png" }
-            ]},
-            { name: "Saturno", radius: 58232, distance: 9.58 * AU, period: 10759, rotationPeriod: 10.7, color: 0xf0e68c, texture: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Solarsystemscope_texture_2k_saturn.jpg", moons: [
-                { name: "Titán", radius: 2575, distance: 1.221870, period: 15.94, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Titan_in_true_color.jpg/1024px-Titan_in_true_color.jpg" }
-            ]},
+            {
+                name: "Tierra", radius: 6371, distance: 1 * AU, period: 365, rotationPeriod: 24, color: 0x0077ff, texture: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Solarsystemscope_texture_2k_earth_daymap.jpg", moons: [
+                    { name: "Luna", radius: 1737, distance: 0.384, period: 27.3, texture: "https://upload.wikimedia.org/wikipedia/commons/1/1f/Solarsystemscope_texture_2k_moon.jpg" }
+                ]
+            },
+            {
+                name: "Marte", radius: 3390, distance: 1.52 * AU, period: 687, rotationPeriod: 24.6, color: 0xff5733, texture: "https://upload.wikimedia.org/wikipedia/commons/4/46/Solarsystemscope_texture_2k_mars.jpg", moons: [
+                    { name: "Fobos", radius: 11.1, distance: 0.009377, period: 0.319, color: 0x5c5c5c },
+                    { name: "Deimos", radius: 6.2, distance: 0.02346, period: 1.262, color: 0x7f7f7f }
+                ]
+            },
+            {
+                name: "Júpiter", radius: 69911, distance: 5.2 * AU, period: 4333, rotationPeriod: 9.9, color: 0xffca80, texture: "https://upload.wikimedia.org/wikipedia/commons/b/be/Solarsystemscope_texture_2k_jupiter.jpg", moons: [
+                    { name: "Ío", radius: 1821, distance: 0.421700, period: 1.77, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Io_highest_resolution_true_color.jpg/1024px-Io_highest_resolution_true_color.jpg" },
+                    { name: "Europa", radius: 1560, distance: 0.671100, period: 3.55, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Europa_map_from_Galileo_and_Voyager_data.jpg/1024px-Europa_map_from_Galileo_and_Voyager_data.jpg" },
+                    { name: "Ganimedes", radius: 2634, distance: 1.070400, period: 7.15, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Ganymede_by_Galileo_%E0%A4%9D%E0%A5%82%E0%A4%B2%E0%A5%87%E0%A4%B2%E0%A4%BE%E0%A4%B2.jpg/1024px-Ganymede_by_Galileo_%E0%A4%9D%E0%A5%82%E0%A4%B2%E0%A5%87%E0%A4%B2%E0%A4%BE%E0%A4%B2.jpg" },
+                    { name: "Calisto", radius: 2410, distance: 1.882700, period: 16.69, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Callisto_map_mosaics_Voyager_Galileo_%E0%A4%A8%E0%A4%B9%E0%A5%8B%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A4%B9.png/1024px-Callisto_map_mosaics_Voyager_Galileo_%E0%A4%A8%E0%A4%B9%E0%A5%8B%E0%A4%97%E0%A5%8D%E0%A4%B0%E0%A4%B9.png" }
+                ]
+            },
+            {
+                name: "Saturno", radius: 58232, distance: 9.58 * AU, period: 10759, rotationPeriod: 10.7, color: 0xf0e68c, texture: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Solarsystemscope_texture_2k_saturn.jpg", moons: [
+                    { name: "Titán", radius: 2575, distance: 1.221870, period: 15.94, texture: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Titan_in_true_color.jpg/1024px-Titan_in_true_color.jpg" }
+                ]
+            },
             { name: "Urano", radius: 25362, distance: 19.22 * AU, period: 30687, rotationPeriod: 17.2, color: 0x00ffff, texture: "https://upload.wikimedia.org/wikipedia/commons/9/95/Solarsystemscope_texture_2k_uranus.jpg" },
             { name: "Neptuno", radius: 24622, distance: 30.05 * AU, period: 60190, rotationPeriod: 16.1, color: 0x0000ff, texture: "https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_2k_neptune.jpg" }
         ];
@@ -93,7 +123,7 @@
                 }
             }
         };
-        
+
         function getPlanetOrbitConfig(planetName) {
             const planetKey = planetName.toLowerCase();
             const config = scaleConfig.artistic.moon.orbit;
@@ -103,8 +133,8 @@
             if (planetKey.includes('marte') || planetKey.includes('mars')) return { ...config.default, ...config.mars };
             return { ...config.default };
         }
-        
-        let params = { 
+
+        let params = {
             timeScale: 100,
             showOrbits: true,
             showMoons: true,
@@ -124,7 +154,7 @@
 
         function init() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100000); 
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 100000);
             camera.position.set(0, 250, 500);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -135,7 +165,7 @@
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
-            controls.minDistance = 0.1; 
+            controls.minDistance = 0.1;
             controls.maxDistance = 50000;
 
             const ambientLight = new THREE.AmbientLight(0xaaaaaa, 0.6);
@@ -149,14 +179,14 @@
             const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
             sun = new THREE.Mesh(sunGeometry, sunMaterial);
             sun.name = "Sol";
-            sun.userData = { radiusKm: SUN_RADIUS_KM, type: 'star', getOrbitCenter: () => new THREE.Vector3(0,0,0) }; // Sun orbits itself (center of system)
+            sun.userData = { radiusKm: SUN_RADIUS_KM, type: 'star', getOrbitCenter: () => new THREE.Vector3(0, 0, 0) }; // Sun orbits itself (center of system)
             scene.add(sun);
             allCelestialObjects.push(sun);
 
             planetData.forEach((data, index) => {
-                const planetGroup = new THREE.Object3D(); 
-                planetGroup.name = data.name + " System"; 
-                scene.add(planetGroup); 
+                const planetGroup = new THREE.Object3D();
+                planetGroup.name = data.name + " System";
+                scene.add(planetGroup);
 
                 const planetGeometry = new THREE.SphereGeometry(1, 32, 16);
                 let planetMaterial;
@@ -172,18 +202,18 @@
                 planet.castShadow = true;
                 planet.receiveShadow = true;
                 // Planet's orbit center is the Sun (scene origin)
-                planetGroup.userData = { ...data, type: 'planetSystem', orbitAngle: Math.random() * Math.PI * 2, index: index, mesh: planet, getOrbitCenter: () => new THREE.Vector3(0,0,0) };
-                planet.userData = { ...data, type: 'planet', parentGroup: planetGroup, moonsMeshes: [], getOrbitCenter: () => new THREE.Vector3(0,0,0) }; 
+                planetGroup.userData = { ...data, type: 'planetSystem', orbitAngle: Math.random() * Math.PI * 2, index: index, mesh: planet, getOrbitCenter: () => new THREE.Vector3(0, 0, 0) };
+                planet.userData = { ...data, type: 'planet', parentGroup: planetGroup, moonsMeshes: [], getOrbitCenter: () => new THREE.Vector3(0, 0, 0) };
 
-                planetGroup.add(planet); 
-                planets.push(planetGroup); 
+                planetGroup.add(planet);
+                planets.push(planetGroup);
                 allCelestialObjects.push(planet);
 
                 const planetOrbitMaterial = new THREE.LineBasicMaterial({ color: 0x444444 });
                 const planetOrbitGeom = new THREE.BufferGeometry();
                 const planetOrbitLine = new THREE.LineLoop(planetOrbitGeom, planetOrbitMaterial);
-                planetOrbits.push(planetOrbitLine); 
-                scene.add(planetOrbitLine); 
+                planetOrbits.push(planetOrbitLine);
+                scene.add(planetOrbitLine);
 
                 if (data.moons) {
                     data.moons.forEach(moonData => {
@@ -197,35 +227,35 @@
                                 moonMaterial = new THREE.MeshStandardMaterial({ color: moonData.color || 0x888888 });
                             }
                         } else {
-                             moonMaterial = new THREE.MeshStandardMaterial({ color: moonData.color || 0x888888 });
+                            moonMaterial = new THREE.MeshStandardMaterial({ color: moonData.color || 0x888888 });
                         }
-                        
+
                         const moon = new THREE.Mesh(moonGeometry, moonMaterial);
                         moon.name = moonData.name;
                         moon.castShadow = true;
                         moon.receiveShadow = true;
-                        
-                        const moonOrbitMaterial = new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.5 }); 
+
+                        const moonOrbitMaterial = new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.5 });
                         const moonOrbitGeom = new THREE.BufferGeometry();
                         const moonOrbitLine = new THREE.LineLoop(moonOrbitGeom, moonOrbitMaterial);
                         moonOrbitLine.name = moonData.name + " Orbit";
-                        
+
                         // Moon's orbit center is its parent planet
-                        moon.userData = { 
-                            ...moonData, 
-                            type: 'moon', 
+                        moon.userData = {
+                            ...moonData,
+                            type: 'moon',
                             orbitAngle: Math.random() * Math.PI * 2,
                             planetName: data.name,
                             parentPlanetMesh: planet, // Reference to parent planet mesh
                             orbitLine: moonOrbitLine,
                             getOrbitCenter: () => planet.getWorldPosition(new THREE.Vector3())
                         };
-                        
-                        planet.add(moon);         
-                        planet.add(moonOrbitLine); 
-                        
+
+                        planet.add(moon);
+                        planet.add(moonOrbitLine);
+
                         allCelestialObjects.push(moon);
-                        planet.userData.moonsMeshes.push(moon); 
+                        planet.userData.moonsMeshes.push(moon);
                     });
                 }
             });
@@ -240,11 +270,11 @@
         }
 
 
-        function createStarfield() { 
+        function createStarfield() {
             const starGeometry = new THREE.BufferGeometry();
             const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5, sizeAttenuation: true });
             const starVertices = [];
-            for (let i = 0; i < 15000; i++) { 
+            for (let i = 0; i < 15000; i++) {
                 const x = THREE.MathUtils.randFloatSpread(30000);
                 const y = THREE.MathUtils.randFloatSpread(30000);
                 const z = THREE.MathUtils.randFloatSpread(30000);
@@ -273,7 +303,7 @@
 
                 let planetOrbitalRadiusValue;
                 if (isArtistic) {
-                    planetOrbitalRadiusValue = scaleConfig.artistic.planet.orbit.baseDistance + 
+                    planetOrbitalRadiusValue = scaleConfig.artistic.planet.orbit.baseDistance +
                         planetData.index * scaleConfig.artistic.planet.orbit.increment;
                 } else {
                     planetOrbitalRadiusValue = planetData.distance * scaleConfig.proportional.distance;
@@ -298,25 +328,25 @@
                         let moonDisplayRadius, currentMoonOrbitalRadius;
 
                         if (isArtistic) {
-                            moonDisplayRadius = scaleConfig.artistic.moon.baseSize + 
-                                            (moonData.radius * scaleConfig.artistic.moon.sizeVariation);
+                            moonDisplayRadius = scaleConfig.artistic.moon.baseSize +
+                                (moonData.radius * scaleConfig.artistic.moon.sizeVariation);
                             moonDisplayRadius = Math.min(moonDisplayRadius, scaleConfig.artistic.moon.maxSize);
                             moonDisplayRadius = Math.max(0.02, moonDisplayRadius);
                             const planetMoons = planetMesh.userData.moonsMeshes;
                             const moonIndexInSystem = planetMoons.findIndex(m => m === moon);
                             const planetConfig = getPlanetOrbitConfig(planetMesh.name);
                             if (planetConfig.distances) {
-                                currentMoonOrbitalRadius = moonIndexInSystem < planetConfig.distances.length ? 
-                                    planetConfig.distances[moonIndexInSystem] : 
+                                currentMoonOrbitalRadius = moonIndexInSystem < planetConfig.distances.length ?
+                                    planetConfig.distances[moonIndexInSystem] :
                                     planetConfig.base + (moonIndexInSystem * (planetConfig.fallbackIncrement || 1.0));
                             } else {
                                 const baseOrbit = planetDisplayRadius * (planetConfig.multiplier || 1.2);
                                 const orbitIncrement = (planetConfig.increment || 0.5) * (moonIndexInSystem + 1);
                                 currentMoonOrbitalRadius = baseOrbit + orbitIncrement;
                             }
-                        } else { 
+                        } else {
                             moonDisplayRadius = moonData.radius * scaleConfig.proportional.object;
-                            moonDisplayRadius = Math.max(0.0001, moonDisplayRadius); 
+                            moonDisplayRadius = Math.max(0.0001, moonDisplayRadius);
                             currentMoonOrbitalRadius = moonData.distance * scaleConfig.proportional.moonDistance;
                             currentMoonOrbitalRadius = Math.max(currentMoonOrbitalRadius, planetDisplayRadius * 1.1);
                         }
@@ -336,13 +366,13 @@
                 }
             });
             if (gui) {
-                 const controller = gui.controllers.find(c => c.property === 'guiScaleModeLabel');
+                const controller = gui.controllers.find(c => c.property === 'guiScaleModeLabel');
                 if (controller) {
                     controller.name(`Escala: ${params.scaleMode}`);
                 }
             }
         }
-        
+
         function getFocusableObjects() {
             const objects = ['None', sun.name];
             planetData.forEach(planet => {
@@ -355,60 +385,91 @@
             });
             return objects;
         }
-        
-        function resetZoomTimeout() {
-            clearTimeout(zoomTimeout);
-            zoomTimeout = setTimeout(() => {
-                if (isFocusing && params.focusPlanet !== 'None') {
-                    const targetObject = findFocusedObjectMesh();
-                    if (targetObject) {
-                        const targetPosition = targetObject.getWorldPosition(new THREE.Vector3());
-                        // Update the locked offset based on current camera and target positions
-                        lockedCameraOffset.subVectors(camera.position, targetPosition);
 
-                        // Also re-lock the orbital direction from the new state.
-                        const orbitCenter = targetObject.userData.getOrbitCenter();
-                        if (params.focusPlanet !== sun.name && orbitCenter) {
-                             const newLockedTargetDir = targetPosition.clone()
-                                                              .sub(orbitCenter)
-                                                              .normalize();
-                             if (newLockedTargetDir.lengthSq() > 0.0001) { // Ensure valid direction
-                                 lockedTargetOrbitalDirection.copy(newLockedTargetDir);
-                             } else if (lockedTargetOrbitalDirection) {
-                                // If new dir is zero (e.g. target at orbit center), keep old valid one if possible
-                             } else { // Default if all else fails
-                                lockedTargetOrbitalDirection = new THREE.Vector3(0,0,1);
-                             }
-                        } else if (params.focusPlanet === sun.name) {
-                            lockedTargetOrbitalDirection = null; // Sun doesn't orbit in this way
-                        }
+        function relockCameraToTarget() { // Anteriormente resetZoomTimeout
+            // clearTimeout(zoomTimeout); // Ya no es necesario
+            // El setTimeout ya no envuelve esta lógica
+            if (isFocusing && params.focusPlanet !== 'None') {
+                const targetObject = findFocusedObjectMesh();
+                if (targetObject) {
+                    const targetPosition = targetObject.getWorldPosition(new THREE.Vector3());
+                    lockedCameraOffset.subVectors(camera.position, targetPosition);
+
+                    const orbitCenter = targetObject.userData.getOrbitCenter();
+                    if (params.focusPlanet !== sun.name && orbitCenter) {
+                         const newLockedTargetDir = targetPosition.clone()
+                                                          .sub(orbitCenter)
+                                                          .normalize();
+                         if (newLockedTargetDir.lengthSq() > 0.0001) {
+                             lockedTargetOrbitalDirection.copy(newLockedTargetDir);
+                         } else if (lockedTargetOrbitalDirection) {
+                            // Mantener el anterior si el nuevo es inválido
+                         } else {
+                            lockedTargetOrbitalDirection = new THREE.Vector3(0,0,1);
+                         }
+                    } else if (params.focusPlanet === sun.name) {
+                        lockedTargetOrbitalDirection = null;
                     }
                 }
-                isUserZooming = false;
-            }, ZOOM_TIMEOUT_DURATION);
+            }
+            isUserZooming = false; // Importante resetear esto aquí
         }
-        
+
         function setupGUI() {
             gui = new GUI();
             gui.title("Controles del Sistema Solar");
             gui.add(params, 'timeScale', 1, 2000, 10).name('Velocidad Tiempo');
-            
+
             if (controls) {
                 controls.enableZoom = true;
-                controls.zoomSpeed = 0.5;
-                controls.addEventListener('start', () => { isUserZooming = true; clearTimeout(zoomTimeout); });
-                controls.addEventListener('end', () => { resetZoomTimeout(); });
+                controls.zoomSpeed = 0.5; // Puedes ajustar esto según prefieras
+
+                controls.addEventListener('start', () => {
+                    isUserZooming = true;
+                    // clearTimeout(zoomTimeout); // Ya no es necesario
+                });
+
+                // El evento 'end' de OrbitControls es crucial.
+                // Se dispara después de que el usuario suelta el ratón y el movimiento de damping ha terminado.
+                controls.addEventListener('end', () => {
+                    // isUserZooming se pondrá a false DENTRO de relockCameraToTarget
+                    relockCameraToTarget();
+                });
             }
-            window.addEventListener('wheel', () => { isUserZooming = true; resetZoomTimeout(); }, { passive: true });
-            
-            orbitToggleButton = gui.add({ toggle: () => {
+
+            // Para el zoom con la rueda del ratón
+            window.addEventListener('wheel', () => {
+                isUserZooming = true; // Indica que el usuario está controlando
+                // clearTimeout(zoomTimeout); // Ya no es necesario
+
+                // Usamos un setTimeout con 0ms para asegurar que OrbitControls
+                // procese el evento de la rueda ANTES de que intentemos re-bloquear.
+                // Esto da tiempo a que la posición de la cámara se actualice por el zoom.
+                setTimeout(() => {
+                    // Solo re-bloquear si no hay otra interacción de OrbitControls en curso
+                    // (por ejemplo, si el usuario también está paneando mientras hace scroll,
+                    // el evento 'end' de OrbitControls se encargará).
+                    // Sin embargo, si el 'end' tarda por el damping, esto podría ser demasiado pronto.
+                    // Es un equilibrio delicado.
+                    // Una opción más simple es DEJAR que 'end' maneje todo,
+                    // ya que OrbitControls suele disparar 'end' después de un zoom también.
+                    // Pero si quieres más inmediatez tras el wheel específicamente:
+                    if (isUserZooming) { // Verifica que todavía se considere "zoom del usuario"
+                        relockCameraToTarget();
+                    }
+                }, 0); // Un pequeño delay para permitir que OrbitControls actualice la cámara por el zoom
+            }, { passive: true }); // passive:true para mejor rendimiento del scroll
+
+            orbitToggleButton = gui.add({
+                toggle: () => {
                     params.showOrbits = !params.showOrbits;
                     orbitToggleButton.name(`Órbitas: ${params.showOrbits ? 'Visibles' : 'Ocultas'}`);
-                    updateScalesAndPositions(); 
+                    updateScalesAndPositions();
                 }
             }, 'toggle').name(`Órbitas: ${params.showOrbits ? 'Visibles' : 'Ocultas'}`);
 
-            moonToggleButton = gui.add({ toggle: () => {
+            moonToggleButton = gui.add({
+                toggle: () => {
                     params.showMoons = !params.showMoons;
                     moonToggleButton.name(`Lunas: ${params.showMoons ? 'Visibles' : 'Ocultas'}`);
                     updateScalesAndPositions();
@@ -419,21 +480,25 @@
                 .name('Modo Escala')
                 .onChange(() => {
                     updateScalesAndPositions();
-                    if (params.focusPlanet !== 'None') { // Re-focus to adjust camera distances
+                    if (params.focusPlanet !== 'None') {
                         focusOnPlanet();
-                    } else { // If nothing focused, reset view slightly
-                        controls.target.set(0,0,0);
-                        camera.position.set(0, 250, 500);
+                    } else {
+                        controls.target.set(0, 0, 0);
+                        // Restablecer también la posición de la cámara a una vista general
+                        camera.position.set(0, params.scaleMode === 'Artistic' ? 250 : 2500, params.scaleMode === 'Artistic' ? 500 : 5000);
+                        if (params.scaleMode === 'Proportional') { // Ajustar el far plane para proporcional si es necesario
+                            camera.far = 100000; // Asegurar que se vea todo
+                        }
                         controls.update();
                     }
                 });
-            
+
             gui.add(params, 'guiScaleModeLabel').name(`Escala: ${params.scaleMode}`).domElement.style.pointerEvents = "none";
-            
+
             const focusableObjects = getFocusableObjects();
             gui.add(params, 'focusPlanet', focusableObjects)
-               .name('Enfocar Cuerpo Celeste')
-               .onChange(focusOnPlanet);
+                .name('Enfocar Cuerpo Celeste')
+                .onChange(focusOnPlanet);
         }
 
         function findFocusedObjectMesh() {
@@ -448,64 +513,72 @@
                 return planets.find(p => p.userData.name === params.focusPlanet)?.userData.mesh;
             }
         }
-        
+
         function focusOnPlanet() {
             const targetObject = findFocusedObjectMesh();
 
             if (!targetObject) {
                 controls.target.set(0, 0, 0);
                 isFocusing = false;
-                // Optionally reset camera to a default overview position
-                // camera.position.set(0, 250, 500);
+                isUserZooming = false; // Asegurarse de resetear esto también
+                // Opcional: resetear la cámara a una vista general
+                // camera.position.set(0, params.scaleMode === 'Artistic' ? 250 : 2500, params.scaleMode === 'Artistic' ? 500 : 5000);
                 // controls.update();
                 return;
             }
-            
-            isFocusing = true;
-            const targetPosition = targetObject.getWorldPosition(new THREE.Vector3());
-            const orbitCenter = targetObject.userData.getOrbitCenter();
-            
-            controls.target.copy(targetPosition);
 
-            if (!isUserZooming) { // Only adjust camera if user isn't actively controlling
+            isFocusing = true;
+            // isUserZooming = false; // No setear a false aquí directamente, focusOnPlanet puede ser llamado mientras el usuario interactúa
+
+            const targetPosition = targetObject.getWorldPosition(new THREE.Vector3());
+            // const orbitCenter = targetObject.userData.getOrbitCenter(); // Ya no se usa directamente aquí para el offset
+
+            controls.target.copy(targetPosition); // Siempre mira al objetivo
+
+            // Solo ajustar posición de la cámara si NO es una re-focalización mientras el usuario ya está interactuando
+            // O si es la primera vez que se enfoca este objeto.
+            // La idea es que si el usuario ya ajustó el zoom/paneo, focusOnPlanet (desde el GUI por ejemplo)
+            // no debería cambiar drásticamente la cámara, solo re-bloquear.
+
+            let initialFocus = true; // Podrías tener una variable para saber si es el primer focus a este objeto
+            // o si se está re-focalizando. Por ahora, asumimos que el usuario
+            // querrá un buen posicionamiento si llama a focusOnPlanet.
+
+            if (initialFocus || !isUserZooming) { // Si es un nuevo enfoque o el usuario no está interactuando
                 let desiredOffsetMagnitude;
-                const isArtistic = params.scaleMode === 'Artistic';
-                const visualRadius = targetObject.scale.x; // Approx visual radius
+                const visualRadius = targetObject.scale.x;
 
                 if (targetObject.userData.type === 'star') {
-                    desiredOffsetMagnitude = visualRadius * 5;
+                    desiredOffsetMagnitude = visualRadius * (params.scaleMode === 'Artistic' ? 5 : 2.5);
                 } else if (targetObject.userData.type === 'moon') {
-                    desiredOffsetMagnitude = visualRadius * 30; // Moons are small, need more relative distance
+                    desiredOffsetMagnitude = visualRadius * (params.scaleMode === 'Artistic' ? 30 : 15);
                 } else { // Planet
-                    desiredOffsetMagnitude = visualRadius * 10;
+                    desiredOffsetMagnitude = visualRadius * (params.scaleMode === 'Artistic' ? 10 : 5);
                 }
-                desiredOffsetMagnitude = Math.max(desiredOffsetMagnitude, 5); // Absolute minimum distance
+                // Ajustar un mínimo absoluto para que la cámara no quede demasiado cerca
+                let minCamDistance = 1;
+                if (params.scaleMode === 'Proportional') minCamDistance = 0.01; // Puede ser mucho más pequeño en proporcional
+                desiredOffsetMagnitude = Math.max(desiredOffsetMagnitude, minCamDistance);
 
-                // Position camera along current view vector or a default if too close/aligned
+                // Usar la dirección actual de la cámara si es válida, o un default
                 const viewDirection = camera.position.clone().sub(targetPosition);
-                if (viewDirection.lengthSq() < 0.01) viewDirection.set(0, visualRadius * 0.5, visualRadius * 1.5); // Default offset if camera is inside/too close
-                
-                camera.position.copy(targetPosition).add(viewDirection.normalize().multiplyScalar(desiredOffsetMagnitude));
-            }
-            
-            // Lock the offset and orbital direction for the new follow logic
-            lockedCameraOffset.subVectors(camera.position, targetPosition);
-
-            if (targetObject.userData.type === 'star') { // Sun
-                lockedTargetOrbitalDirection = null; // Sun doesn't orbit anything in this context for rotation
-            } else {
-                const dir = targetPosition.clone().sub(orbitCenter).normalize();
-                if (dir.lengthSq() > 0.0001) {
-                    lockedTargetOrbitalDirection = dir;
+                if (viewDirection.lengthSq() < 0.001) { // Si la cámara está muy cerca o dentro del objeto
+                    viewDirection.set(0, visualRadius * (params.scaleMode === 'Artistic' ? 0.3 : 0.1), desiredOffsetMagnitude);
                 } else {
-                    // Fallback if target is at orbit center (should not happen for planets/moons)
-                    lockedTargetOrbitalDirection = new THREE.Vector3(0, 0, 1); 
+                    viewDirection.normalize().multiplyScalar(desiredOffsetMagnitude);
                 }
+                camera.position.copy(targetPosition).add(viewDirection);
             }
-            controls.update(); // Ensure OrbitControls knows the new state
+
+            // Es crucial llamar a relockCameraToTarget después de ajustar la posición/target
+            // para que los nuevos offsets se calculen correctamente.
+            // Aseguramos que 'isUserZooming' se ponga a false al final de esto.
+            relockCameraToTarget();
+
+            controls.update();
         }
 
-        function onWindowResize() { 
+        function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -519,7 +592,7 @@
 
             const raycaster = new THREE.Raycaster();
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(allCelestialObjects, false); 
+            const intersects = raycaster.intersectObjects(allCelestialObjects, false);
 
             if (intersects.length > 0) {
                 selectedObject = intersects[0].object;
@@ -547,7 +620,7 @@
                     }
                 } else if (data.type === 'moon') {
                     html += `<p>Radio: ${data.radius.toLocaleString()} km</p>`;
-                    html += `<p>Distancia media a ${data.planetName}: ${(data.distance * 1000000).toLocaleString()} km</p>`; 
+                    html += `<p>Distancia media a ${data.planetName}: ${(data.distance * 1000000).toLocaleString()} km</p>`;
                     html += `<p>Periodo Orbital: ${data.period} días terrestres</p>`;
                     html += `<p>Planeta: ${data.planetName}</p>`;
                 }
@@ -570,7 +643,7 @@
                                        <p>También puedes usar el menú para enfocar cuerpos celestes específicos.</p>`;
             }
         }
-        
+
         function updateCameraPosition() {
             if (!isFocusing || params.focusPlanet === 'None') return;
 
@@ -591,25 +664,25 @@
                 // Camera position remains as set by user or initial focusOnPlanet
                 return;
             }
-            
+
             const currentOrbitCenterWorldPosition = targetObject.userData.getOrbitCenter();
             const currentTargetDirection = currentTargetWorldPosition.clone()
-                                                .sub(currentOrbitCenterWorldPosition)
-                                                .normalize();
+                .sub(currentOrbitCenterWorldPosition)
+                .normalize();
 
             if (currentTargetDirection.lengthSq() === 0 || lockedTargetOrbitalDirection.lengthSq() === 0) {
-                 // Avoid issues with zero vectors, fallback to simple lookAt
+                // Avoid issues with zero vectors, fallback to simple lookAt
                 controls.target.copy(currentTargetWorldPosition);
                 return;
             }
-            
+
             const rotationQuaternion = new THREE.Quaternion();
             const dot = lockedTargetOrbitalDirection.dot(currentTargetDirection);
 
             if (Math.abs(dot) > 0.99999) { // Parallel or anti-parallel
                 if (dot < 0) { // Anti-parallel (180 degrees)
-                    let axis = new THREE.Vector3().crossVectors(lockedTargetOrbitalDirection, new THREE.Vector3(0,1,0));
-                    if (axis.lengthSq() < 0.0001) axis.set(1,0,0); // If aligned with Y, use X
+                    let axis = new THREE.Vector3().crossVectors(lockedTargetOrbitalDirection, new THREE.Vector3(0, 1, 0));
+                    if (axis.lengthSq() < 0.0001) axis.set(1, 0, 0); // If aligned with Y, use X
                     rotationQuaternion.setFromAxisAngle(axis.normalize(), Math.PI);
                 } // Else (parallel), quaternion is identity (no rotation)
             } else {
@@ -618,11 +691,11 @@
 
             const rotatedOffset = lockedCameraOffset.clone().applyQuaternion(rotationQuaternion);
             const newCameraPosition = currentTargetWorldPosition.clone().add(rotatedOffset);
-            
+
             camera.position.lerp(newCameraPosition, 0.15); // Smoother transition with higher lerp
             controls.target.copy(currentTargetWorldPosition);
         }
-        
+
         function animate() {
             requestAnimationFrame(animate);
 
@@ -652,7 +725,7 @@
                     });
                 }
             });
-            
+
             updateCameraPosition();
 
             controls.update(); // Essential for damping and if target changed
@@ -661,4 +734,5 @@
         init();
     </script>
 </body>
+
 </html>
