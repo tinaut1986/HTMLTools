@@ -1,22 +1,278 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools list</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <title>Herramientas - Intranet</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2dd4bf;
+            --secondary: #0ea5e9;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image:
+                linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)),
+                url('/intranet/assets/bg/tools.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-5px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #2dd4bf, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
+        }
+
+        #toolList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(45, 212, 145, 0.3);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            background: rgba(30, 41, 59, 0.85);
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+
+        .card:hover .icon-box {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary);
+            color: #0f172a;
+        }
+
+        .icon-box img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .status-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        footer {
+            margin-top: 5rem;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>My tools</h1>
-        <button id="nightModeToggle" aria-label="Change night/day mode">
-            <i class="fas fa-moon"></i>
-        </button>
-        <div id="toolList"></div>
+        <nav class="header-nav">
+            <a href="/intranet/index.html" class="btn-back">
+                <i data-lucide="arrow-left"></i> Intranet
+            </a>
+        </nav>
+
+        <header>
+            <h1>Mis Herramientas</h1>
+            <p style="color: var(--text-muted); font-size: 1.25rem;">Utilidades web para productividad y desarrollo</p>
+        </header>
+
+        <main id="toolList">
+            <!-- Dynamic tools will be loaded here -->
+        </main>
     </div>
-    <script src="script.js"></script>
+
+    <footer>
+        <p>&copy; 2026 Sistema de Herramientas • Desarrollado con ❤️</p>
+    </footer>
+
+    <script>
+        const descriptions = {
+            'AnimalSounds': 'Aplicación web simple para explorar y reproducir sonidos de animales.',
+            'EpubSplitter': 'Herramienta para dividir archivos EPUB en capítulos o segmentos.',
+            'SolarSystem': 'Visualización interactiva 3D de nuestro sistema solar.',
+            'TwitterSplitter': 'Utilidad para dividir textos largos en múltiples tweets encadenados.'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toolList = document.getElementById('toolList');
+
+            fetch('get_tools.php')
+                .then(response => response.json())
+                .then(tools => {
+                    tools.forEach(tool => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+
+                        let iconHtml = '<i data-lucide="wrench"></i>';
+                        if (tool.favicon) {
+                            iconHtml = `<img src="data:image/x-icon;base64,${tool.favicon}" alt="favicon">`;
+                        }
+
+                        const desc = descriptions[tool.name] || 'Utilidad interna diseñada para tareas específicas de desarrollo.';
+
+                        card.innerHTML = `
+                            <div class="icon-box">${iconHtml}</div>
+                            <div class="card-content">
+                                <h3>${tool.name}</h3>
+                                <p>${desc}</p>
+                            </div>
+                            <div class="status-footer">
+                                <div class="status-dot"></div>
+                                <span>Operativo</span>
+                            </div>
+                        `;
+
+                        card.addEventListener('click', () => {
+                            window.location.href = `./${tool.name}/index.html`;
+                        });
+
+                        toolList.appendChild(card);
+                    });
+                    lucide.createIcons();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    toolList.innerHTML = '<p>Error al cargar herramientas.</p>';
+                });
+        });
+        lucide.createIcons();
+    </script>
 </body>
+
 </html>
-
-
