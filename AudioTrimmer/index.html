@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Trimmer & Editor</title>
+    <link rel="icon" href="favicon.ico" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- lamejs for client-side MP3 encoding -->
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <a href="../index.html" class="back-link" title="Volver a herramientas">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1><i class="fas fa-wave-square"></i> Audio Trimmer & Editor</h1>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="btn-icon" aria-label="Cambiar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dropzone / File Loader -->
+        <section id="dropZone" class="drop-zone">
+            <input type="file" id="audioInput" accept="audio/*" class="file-input">
+            <div class="drop-zone-content">
+                <div class="drop-icon"><i class="fas fa-file-audio"></i></div>
+                <h2>Arrastra tu archivo de audio aquí o haz clic para seleccionarlo</h2>
+                <p class="drop-subtitle">Compatible con MP3, WAV, OGG, M4A, FLAC, AAC, WebM</p>
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('audioInput').click()">
+                    <i class="fas fa-upload"></i> Seleccionar Audio
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Workspace (Hidden until audio is loaded) -->
+        <main id="editorWorkspace" class="editor-workspace hidden">
+            <!-- Audio Info Bar -->
+            <div class="audio-info-bar">
+                <div class="info-group">
+                    <span class="info-label"><i class="fas fa-music"></i> Archivo:</span>
+                    <span id="audioFileName" class="info-value">-</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label"><i class="fas fa-clock"></i> Duración total:</span>
+                    <span id="audioDurationText" class="info-value">00:00.00</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label"><i class="fas fa-sliders-h"></i> Frecuencia / Canales:</span>
+                    <span id="audioSpecsText" class="info-value">-</span>
+                </div>
+                <button id="btnLoadAnother" class="btn btn-secondary btn-sm" title="Cargar otro archivo">
+                    <i class="fas fa-redo"></i> Cambiar audio
+                </button>
+            </div>
+
+            <!-- Waveform Canvas Section -->
+            <section class="waveform-card" id="waveformCard" tabindex="0" title="Haz clic aquí para enfocar. Pulsa Espacio para reproducir/pausar">
+                <div class="timeline-ruler-wrapper">
+                    <canvas id="rulerCanvas"></canvas>
+                </div>
+                <div class="waveform-canvas-wrapper" id="waveformContainer">
+                    <canvas id="waveformCanvas"></canvas>
+                    <!-- Visual Selection Overlay Layer -->
+                    <div id="selectionOverlay" class="selection-overlay">
+                        <div class="selection-handle handle-left" id="handleLeft" title="Arrastrar para ajustar inicio"></div>
+                        <div class="selection-body" id="selectionBody" title="Arrastra para mover la franja a lo largo del audio">
+                            <span class="selection-badge" id="selectionDurationBadge">0.00s</span>
+                            <div class="fade-visual-in" id="fadeVisualIn"></div>
+                            <div class="fade-visual-out" id="fadeVisualOut"></div>
+                        </div>
+                        <div class="selection-handle handle-right" id="handleRight" title="Arrastrar para ajustar fin"></div>
+                    </div>
+                    <!-- Playhead indicator -->
+                    <div id="playhead" class="playhead hidden"></div>
+                </div>
+
+                <!-- Range Trackbar Slider for quick navigation -->
+                <div class="navigation-track-wrapper">
+                    <span class="nav-label">Posición de la franja:</span>
+                    <input type="range" id="stripPositionSlider" min="0" max="100" step="0.01" value="0" class="nav-slider">
+                </div>
+            </section>
+
+            <!-- Controls Grid -->
+            <div class="controls-grid">
+                <!-- Panel 1: Ajuste de Franja / Duración -->
+                <div class="card control-panel">
+                    <h3><i class="fas fa-crop-alt"></i> Selección de Franja</h3>
+                    
+                    <div class="preset-buttons-row">
+                        <span class="sub-label">Fijar duración a:</span>
+                        <div class="btn-group-presets">
+                            <button type="button" class="btn-chip" data-duration="5">5s</button>
+                            <button type="button" class="btn-chip" data-duration="10">10s</button>
+                            <button type="button" class="btn-chip active" data-duration="15">15s</button>
+                            <button type="button" class="btn-chip" data-duration="30">30s</button>
+                            <button type="button" class="btn-chip" data-duration="60">60s</button>
+                            <button type="button" class="btn-chip" data-duration="all">Todo</button>
+                        </div>
+                    </div>
+
+                    <div class="inputs-row">
+                        <div class="input-field">
+                            <label for="inputDurationLock">
+                                Duración franja (segundos):
+                            </label>
+                            <div class="input-with-actions">
+                                <input type="number" id="inputDurationLock" min="0.1" step="0.1" value="15.0">
+                                <label class="checkbox-label" title="Mantener la duración fija al mover la selección">
+                                    <input type="checkbox" id="lockDurationToggle" checked> Bloquear duración
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inputs-row-duo">
+                        <div class="input-field">
+                            <label for="inputStartTime">Inicio (s):</label>
+                            <div class="stepper-input">
+                                <button type="button" class="btn-step" id="btnStartMinus"><i class="fas fa-minus"></i></button>
+                                <input type="number" id="inputStartTime" min="0" step="0.1" value="0.0">
+                                <button type="button" class="btn-step" id="btnStartPlus"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <label for="inputEndTime">Fin (s):</label>
+                            <div class="stepper-input">
+                                <button type="button" class="btn-step" id="btnEndMinus"><i class="fas fa-minus"></i></button>
+                                <input type="number" id="inputEndTime" min="0.1" step="0.1" value="15.0">
+                                <button type="button" class="btn-step" id="btnEndPlus"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Efectos Fade In / Fade Out & Volumen -->
+                <div class="card control-panel">
+                    <h3><i class="fas fa-sliders-h"></i> Efectos de Entrada y Salida</h3>
+
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="fadeInDuration"><i class="fas fa-sign-in-alt"></i> Fade-In (Aparición):</label>
+                            <span id="fadeInText" class="badge-value">1.5 s</span>
+                        </div>
+                        <input type="range" id="fadeInDuration" min="0" max="10" step="0.1" value="1.5">
+                    </div>
+
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="fadeOutDuration"><i class="fas fa-sign-out-alt"></i> Fade-Out (Desvanecimiento):</label>
+                            <span id="fadeOutText" class="badge-value">2.0 s</span>
+                        </div>
+                        <input type="range" id="fadeOutDuration" min="0" max="10" step="0.1" value="2.0">
+                    </div>
+
+                    <div class="slider-control">
+                        <div class="slider-header">
+                            <label for="volumeGain"><i class="fas fa-volume-up"></i> Ganancia / Volumen:</label>
+                            <span id="volumeGainText" class="badge-value">100%</span>
+                        </div>
+                        <input type="range" id="volumeGain" min="0" max="200" step="5" value="100">
+                    </div>
+                </div>
+
+                <!-- Panel 3: Reproductor y Previsualización -->
+                <div class="card control-panel preview-panel">
+                    <h3><i class="fas fa-play-circle"></i> Previsualización en Tiempo Real</h3>
+
+                    <div class="time-display-large">
+                        <span id="currentPlaybackTime">00:00.00</span>
+                        <span class="time-divider">/</span>
+                        <span id="totalSelectedTime">00:15.00</span>
+                    </div>
+
+                    <div class="playback-controls">
+                        <div class="playback-controls-row">
+                            <button id="btnPlaySelection" class="btn btn-action" title="Reproducir selección con efectos">
+                                <i class="fas fa-play"></i> <span>Franja</span>
+                            </button>
+                            <button id="btnPlayAll" class="btn btn-secondary" title="Reproducir audio completo">
+                                <i class="fas fa-headphones"></i> <span>Completo</span>
+                            </button>
+                        </div>
+                        <div class="playback-controls-row">
+                            <button id="btnStop" class="btn btn-secondary" title="Detener reproducción">
+                                <i class="fas fa-stop"></i> <span>Detener</span>
+                            </button>
+                            <button id="btnLoopToggle" class="btn btn-icon-toggle" title="Repetir en bucle">
+                                <i class="fas fa-repeat"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="preview-options">
+                        <label class="checkbox-label" title="Aplica los fades y el volumen durante la previsualización">
+                            <input type="checkbox" id="previewWithEffects" checked>
+                            Previsualizar con efectos de Fade
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Panel 4: Exportación -->
+                <div class="card control-panel export-panel">
+                    <h3><i class="fas fa-file-export"></i> Exportar Audio Recortado</h3>
+                    <p class="export-desc">
+                        Se procesará la franja exacta seleccionada con los efectos de fade y volumen configurados.
+                    </p>
+
+                    <div class="export-options-row">
+                        <div class="format-selection">
+                            <label class="radio-label">
+                                <input type="radio" name="exportFormat" value="wav" checked>
+                                <span class="format-pill">WAV (Sin pérdida, 16-bit)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="exportFormat" value="mp3">
+                                <span class="format-pill">MP3 (Comprimido, 192kbps)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="export-action-box">
+                        <button id="btnExport" class="btn btn-success btn-lg btn-block">
+                            <i class="fas fa-download"></i> Descargar Audio Procesado
+                        </button>
+                        <div id="exportProgressContainer" class="progress-bar-container hidden">
+                            <div id="exportProgressBar" class="progress-bar"></div>
+                            <span id="exportProgressText" class="progress-text">Procesando audio...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden audio element for fallback or extra audio decoding -->
+    <audio id="audioHelper" class="hidden"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
