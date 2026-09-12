@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#0ea5e9"/>
+  <!-- Mouse outline -->
+  <path d="M 32 12 C 22 12 18 20 18 36 C 18 48 24 52 32 52 C 40 52 46 48 46 36 C 46 20 42 12 32 12 Z" fill="#0f172a" stroke="#f8fafc" stroke-width="2.5"/>
+  <!-- Middle line -->
+  <line x1="32" y1="12" x2="32" y2="28" stroke="#f8fafc" stroke-width="2.5"/>
+  <!-- Scroll wheel -->
+  <rect x="29" y="18" width="6" height="10" rx="3" fill="#2dd4bf"/>
+</svg>
