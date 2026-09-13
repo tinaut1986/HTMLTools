@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNI a Tamaño Real - Intranet</title>
+    <link rel="icon" type="image/png" href="/intranet/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2dd4bf;
+            --secondary: #0ea5e9;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #f87171;
+            --warn: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image:
+                linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)),
+                url('/intranet/assets/bg/tools.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1240px;
+            width: 100%;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-5px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #2dd4bf, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.05em;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 760px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 0.7rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: #0f172a;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-sub {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        #dropZone {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-muted);
+        }
+
+        #dropZone:hover,
+        #dropZone.dragover {
+            border-color: var(--primary);
+            background: rgba(45, 212, 191, 0.08);
+            color: var(--text-main);
+        }
+
+        #dropZone .big {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #dropZone p {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        #dropZone small {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn.primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border: none;
+            color: #0f172a;
+        }
+
+        .btn.primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn.danger:hover {
+            background: rgba(248, 113, 113, 0.2);
+            border-color: rgba(248, 113, 113, 0.4);
+        }
+
+        .btn.small {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.82rem;
+            border-radius: 0.6rem;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .editor-pane,
+        .preview-pane {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+        }
+
+        .pane-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .img-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+        }
+
+        #loupeCanvas {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+            pointer-events: none;
+            display: none;
+            z-index: 10;
+            background: #000;
+        }
+
+        canvas.editor {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            display: block;
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        canvas.crop {
+            max-width: 280px;
+            height: auto;
+            display: block;
+            background: #fff;
+        }
+
+        canvas.sheet {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            display: block;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem;
+            padding: 0.7rem 1rem;
+            min-height: 44px;
+        }
+
+        .status-bar .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .status-bar.ok .dot {
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .status-bar.err .dot {
+            background: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .status-bar.warn .dot {
+            background: var(--warn);
+            box-shadow: 0 0 8px var(--warn);
+        }
+
+        .cand-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .cand-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+        }
+
+        .chip {
+            font-size: 0.82rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .chip.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: #0f172a;
+            font-weight: 700;
+            border-color: transparent;
+        }
+
+        .chip.ghost {
+            background: rgba(45, 212, 191, 0.1);
+            border-style: dashed;
+            color: var(--primary);
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .hint strong {
+            color: var(--text-main);
+        }
+
+        .options-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .field label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .field select,
+        .dpiselect {
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 0.6rem;
+            padding: 0.5rem 0.9rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .switch {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .track {
+            width: 44px;
+            height: 24px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            position: relative;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+        .track::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.3s;
+        }
+
+        .switch input:checked+.track {
+            background: var(--primary);
+        }
+
+        .switch input:checked+.track::after {
+            transform: translateX(20px);
+        }
+
+        .sheet-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .badge.green {
+            background: rgba(45, 212, 191, 0.15);
+            color: var(--primary);
+            border-color: rgba(45, 212, 191, 0.3);
+        }
+
+        .pager {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .empty-sheet {
+            border: 2px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 0.75rem;
+            padding: 2.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: -3px;
+            margin-right: 0.4rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-box {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 0.75rem;
+            padding: 0.9rem 1.1rem;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-bottom: 1.2rem;
+        }
+
+        .info-box.err-box {
+            background: rgba(248, 113, 113, 0.08);
+            border-color: rgba(248, 113, 113, 0.35);
+        }
+
+        @media (max-width: 900px) {
+            .editor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="header-nav">
+            <a href="/intranet/HTMLTools/index.html" class="btn-back">
+                ← Mis Herramientas
+            </a>
+        </nav>
+
+        <header>
+            <h1>DNI a Tamaño Real</h1>
+            <p>Sube una foto donde aparezca uno o varios <strong>DNI</strong>, se detecta el borde automáticamente
+                (OpenCV), puedes corregirlo arrastrando las esquinas y se genera una <strong>hoja A4</strong> con el
+                carné a su tamaño físico real (85,6 × 53,98 mm) lista para imprimir a escala 1:1.</p>
+        </header>
+
+        <div id="cvBox" class="info-box hidden">
+            <strong>⏳ Módulo de visión (OpenCV) descargándose…</strong>
+            La primera vez puede tardar unos segundos. Mientras tanto puedes cargar tu imagen.
+        </div>
+
+        <div class="card">
+            <div class="step-title">
+                <span class="step-num">1</span>
+                <span>Sube una imagen</span>
+            </div>
+            <p class="step-sub">Una foto con el DNI apoyado sobre una superficie, o un escaneo. Mientras más plana y
+                nítida, mejor la detección.</p>
+            <div id="dropZone">
+                <div class="big">🪪</div>
+                <p>Arrastra una imagen aquí o haz clic para elegirla</p>
+                <small>JPG, PNG, WebP… · Se usa a resolución completa para recortar el DNI</small>
+                <div class="btn-row" style="justify-content:center">
+                    <button class="btn primary" id="btnSample" type="button">🎲 Probar con una imagen de ejemplo</button>
+                </div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" hidden>
+        </div>
+
+        <div class="card hidden" id="editorCard">
+            <div class="step-title">
+                <span class="step-num">2</span>
+                <span>Revisa y ajusta la detección</span>
+            </div>
+            <p class="step-sub">Arrastra las esquinas verdes para ajustar el recuadro. Si la detección falla o hay varias
+                tarjetas, usa los candidatos o dibuja las 4 esquinas a mano.</p>
+
+            <div class="editor-grid">
+                <div class="editor-pane">
+                    <div class="pane-title">🔎 Imagen original</div>
+                    <div class="img-wrap">
+                        <canvas id="editCanvas" class="editor"></canvas>
+                        <canvas id="loupeCanvas" width="140" height="140"></canvas>
+                    </div>
+                    <div class="status-bar" id="editStatus">
+                        <span class="dot"></span>
+                        <span id="editStatusText">Cargando imagen…</span>
+                    </div>
+                    <div id="candBox" class="hidden">
+                        <div class="cand-label">Tarjetas detectadas — elige cuál ajustar:</div>
+                        <div class="cand-row" id="candRow"></div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn" id="btnDetect" type="button">🔍 Detectar de nuevo</button>
+                        <button class="btn" id="btnManual" type="button">✏️ Dibujar a mano</button>
+                        <button class="btn" id="btnUndo" type="button">↩️ Deshacer punto</button>
+                        <button class="btn" id="btnReset" type="button">🗑️ Bordes completos</button>
+                        <button class="btn" id="btnRotL" type="button">↺ Girar imagen</button>
+                        <button class="btn" id="btnRotR" type="button">↻ Girar imagen</button>
+                    </div>
+                </div>
+
+                <div class="preview-pane">
+                    <div class="pane-title">✂️ DNI recortado (enderezado)</div>
+                    <div class="img-wrap" style="background:#fff">
+                        <canvas id="cropCanvas" class="crop"></canvas>
+                    </div>
+                    <div class="status-bar" id="cropStatus">
+                        <span class="dot"></span>
+                        <span id="cropStatusText">Sin recorte aún.</span>
+                    </div>
+                    <div class="field" style="margin-top:0.9rem">
+                        <label>🔲 Forma de las esquinas <span id="cornerDetected" class="badge" style="margin-left:0.4rem"></span></label>
+                        <div class="cand-row" style="margin-top:0.3rem">
+                            <span class="chip active" id="cornerAuto" data-mode="auto">🤖 Automático</span>
+                            <span class="chip" id="cornerSquare" data-mode="square">⬜ Rectas</span>
+                            <span class="chip" id="cornerRound" data-mode="round">◻️ Redondeadas</span>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-top:0.9rem">
+                        <label for="insetRange">Radio del redondeo: <span id="insetVal">3.2</span> mm</label>
+                        <input type="range" id="insetRange" min="1" max="5" step="0.1" value="3.2">
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn primary" id="btnAdd" type="button">＋ Añadir a la hoja A4</button>
+                        <button class="btn" id="btnDlCrop" type="button">⬇️ Descargar DNI recortado</button>
+                    </div>
+                    <p class="hint" style="margin-top:0.8rem">
+                        <strong>Nota:</strong> cada vez que arrastres una esquina el recorte se vuelve a calcular.
+                        Cuando esté bien, pulsa <strong>“Añadir a la hoja A4”</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card hidden" id="sheetCard">
+            <div class="step-title">
+                <span class="step-num">3</span>
+                <span>Hoja A4 a tamaño real</span>
+            </div>
+            <p class="step-sub">El DNI se coloca a 85,6 × 53,98 mm exactos. El PDF/DNI se imprimen a escala 1:1 (ajusta
+                la impresora a “Tamaño real / Porcentaje 100%”).</p>
+
+            <div class="info-box hidden" id="noCvInfo">
+                <strong>⚠️ Sin OpenCV:</strong> como el módulo de visión no se pudo cargar, la hoja A4 y las descargas
+                siguen funcionando: dibuja las esquinas a mano si no lo has hecho.
+            </div>
+
+            <div class="options-row">
+                <div class="field">
+                    <label for="dpiSelect">Resolución</label>
+                    <select id="dpiSelect" class="dpiselect">
+                        <option value="150">150 ppp (borrador)</option>
+                        <option value="300" selected>300 ppp (recomendado)</option>
+                        <option value="600">600 ppp (máxima)</option>
+                    </select>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="guideCheck" checked>
+                    <span class="track"></span>
+                    Línea de corte guía
+                </label>
+                <label class="switch">
+                    <input type="checkbox" id="borderCheck">
+                    <span class="track"></span>
+                    Borde perimetral
+                </label>
+            </div>
+
+            <div class="sheet-meta">
+                <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+                    <span class="badge green" id="sheetCount">0 DNI en la hoja</span>
+                    <span class="badge" id="sheetDpi">300 ppp</span>
+                    <span class="badge">A4 · 210 × 297 mm</span>
+                </div>
+                <div class="pager">
+                    <button class="btn small" id="pagePrev" type="button">‹ Ant.</button>
+                    <span class="badge" id="pageInfo">—</span>
+                    <button class="btn small" id="pageNext" type="button">Sig. ›</button>
+                </div>
+            </div>
+
+            <div id="sheetWrap" class="empty-sheet">
+                Todavía no has añadido ningún DNI. Vuelve al paso 2 y pulsa <strong>“Añadir a la hoja A4”</strong>.
+            </div>
+
+            <div class="btn-row">
+                <button class="btn primary" id="btnPdf" type="button">📄 Descargar PDF (A4 real)</button>
+                <button class="btn" id="btnPng" type="button">🖼️ Descargar página (PNG)</button>
+                <button class="btn" id="btnPrint" type="button">🖨️ Abrir PDF para imprimir</button>
+                <button class="btn danger" id="btnClear" type="button">🧹 Vaciar hoja</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Detección de bordes con OpenCV.js (WebAssembly) · Procesado 100% local: tu imagen nunca sale de tu navegador.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            /* ================= Constantes físicas ================= */
+            const MM_IN = 25.4;
+            const ID_W = 85.6;          // mm
+            const ID_H = 53.98;         // mm
+            const ID_ASPECT = ID_W / ID_H;   // ≈ 1.5858
+            const A4_W = 210;           // mm
+            const A4_H = 297;           // mm
+            const SHEET_MARGIN = 12;    // mm (margen interior de la hoja)
+            const SHEET_GAP = 8;        // mm (separación entre tarjetas)
+
+            const MAX_SRC = 2600;       // máx. dimensión para el recorte (calidad)
+            const MAX_EDIT = 1200;      // máx. dimensión del editor (interacción)
+
+            /* ================= Elementos ================= */
+            const $ = id => document.getElementById(id);
+            const dropZone = $('dropZone');
+            const fileInput = $('fileInput');
+            const btnSample = $('btnSample');
+            const editorCard = $('editorCard');
+            const sheetCard = $('sheetCard');
+            const cvBox = $('cvBox');
+            const noCvInfo = $('noCvInfo');
+
+            const editCanvas = $('editCanvas');
+            const editCtx = editCanvas.getContext('2d', { willReadFrequently: true });
+            const cropCanvas = $('cropCanvas');
+            const cropCtx = cropCanvas.getContext('2d');
+
+            const editStatus = $('editStatus');
+            const editStatusText = $('editStatusText');
+            const cropStatus = $('cropStatus');
+            const cropStatusText = $('cropStatusText');
+
+            const candBox = $('candBox');
+            const candRow = $('candRow');
+            const insetRange = $('insetRange');
+            const insetVal = $('insetVal');
+            const cornerAuto = $('cornerAuto');
+            const cornerSquare = $('cornerSquare');
+            const cornerRound = $('cornerRound');
+            const cornerDetected = $('cornerDetected');
+            const loupeCanvas = $('loupeCanvas');
+            const loupeCtx = loupeCanvas.getContext('2d');
+            const imgWrap = editCanvas.closest('.img-wrap');
+
+            const dpiSelect = $('dpiSelect');
+            const guideCheck = $('guideCheck');
+            const borderCheck = $('borderCheck');
+            const sheetWrap = $('sheetWrap');
+            const sheetCount = $('sheetCount');
+            const sheetDpi = $('sheetDpi');
+            const pageInfo = $('pageInfo');
+            const pagePrev = $('pagePrev');
+            const pageNext = $('pageNext');
+
+            /* ================= Estado ================= */
+            let cvReady = false;
+            let cv = null;
+            let fullCanvas = null;      // imagen original a MAX_SRC
+            let viewCanvas = null;      // imagen para el editor (MAX_EDIT)
+            let corners = null;         // [{x,y}×4] en coords de fullCanvas (TL,TR,BR,BL)
+            let candidates = [];        // []
+            let manualMode = false;
+            let manualPts = [];
+            let activeIdx = -1;         // esquina arrastrando
+            let activeMove = false;     // arrastrando toda la tarjeta
+            let lastCrop = null;        // canvas del recorte actual
+            let sheetDnis = [];         // [{canvas, dataURL}]
+            let curPage = 0;
+            let pages = [];             // [ {canvas, items:[{x,y,w,h,dataURL}] (px)} ]
+            let pendingDetect = false;  // detectar cuando cv esté listo
+
+            const editScale = () => fullCanvas ? fullCanvas.width / viewCanvas.width : 1;
+
+            /* ================= Carga de imagen ================= */
+            dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+            dropZone.addEventListener('drop', e => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const f = e.dataTransfer.files[0];
+                if (f && f.type.startsWith('image/')) loadFile(f);
+            });
+            fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+            btnSample.addEventListener('click', e => { e.stopPropagation(); loadSample(); });
+
+            function loadFile(file) {
+                const url = URL.createObjectURL(file);
+                const img = new Image();
+                img.onload = () => { URL.revokeObjectURL(url); setupImage(img); };
+                img.onerror = () => { URL.revokeObjectURL(url); alert('No se pudo leer la imagen.'); };
+                img.src = url;
+            }
+
+            function downscale(img, maxDim) {
+                const iw = img.naturalWidth || img.width;
+                const ih = img.naturalHeight || img.height;
+                const scale = Math.min(1, maxDim / Math.max(iw, ih));
+                const c = document.createElement('canvas');
+                c.width = Math.max(1, Math.round(iw * scale));
+                c.height = Math.max(1, Math.round(ih * scale));
+                const ctx = c.getContext('2d');
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, c.width, c.height);
+                return c;
+            }
+
+            function setupImage(img) {
+                fullCanvas = downscale(img, MAX_SRC);
+                viewCanvas = downscale(fullCanvas, MAX_EDIT);
+                corners = null;
+                candidates = [];
+                manualPts = [];
+                manualMode = false;
+                lastCrop = null;
+
+                editorCard.classList.remove('hidden');
+                fitView();
+                setStatus(editStatus, 'Imagen cargada, detectando tarjeta…', '');
+                pendingDetect = true;
+                tryDetect();
+                sheetCard.classList.remove('hidden');
+            }
+
+            function fitView() {
+                editCanvas.width = viewCanvas.width;
+                editCanvas.height = viewCanvas.height;
+                drawEditor();
+            }
+
+            function drawEditor() {
+                editCtx.clearRect(0, 0, editCanvas.width, editCanvas.height);
+                editCtx.drawImage(viewCanvas, 0, 0);
+
+                if (manualMode) {
+                    editCtx.lineWidth = 2;
+                    editCtx.strokeStyle = '#fbbf24';
+                    for (let i = 0; i < manualPts.length; i++) {
+                        if (i > 0) {
+                            editCtx.beginPath();
+                            editCtx.moveTo(manualPts[i - 1].x, manualPts[i - 1].y);
+                            editCtx.lineTo(manualPts[i].x, manualPts[i].y);
+                            editCtx.stroke();
+                        }
+                        drawHandle(editCtx, manualPts[i].x, manualPts[i].y, `#fbbf24`, i + 1);
+                    }
+                    return;
+                }
+
+                if (!corners || corners.length !== 4) return;
+
+                const p = corners.map(c => ({ x: c.x / editScale(), y: c.y / editScale() }));
+
+                // relleno suave sobre la zona fuera del DNI
+                editCtx.lineWidth = 3;
+                editCtx.strokeStyle = '#2dd4bf';
+                editCtx.setLineDash([]);
+                editCtx.beginPath();
+                editCtx.moveTo(p[0].x, p[0].y);
+                for (let i = 1; i < 4; i++) editCtx.lineTo(p[i].x, p[i].y);
+                editCtx.closePath();
+                editCtx.stroke();
+
+                for (let i = 0; i < 4; i++) drawHandle(editCtx, p[i].x, p[i].y, '#2dd4bf', i + 1);
+
+                // marca de cara (arriba) con lupa: la arista TL-TR
+                const mx = (p[0].x + p[1].x) / 2, my = (p[0].y + p[1].y) / 2;
+                editCtx.fillStyle = '#ec4899';
+                editCtx.beginPath();
+                editCtx.arc(mx, my, 7, 0, Math.PI * 2);
+                editCtx.fill();
+                editCtx.fillStyle = '#fff';
+                editCtx.font = 'bold 9px Inter, sans-serif';
+                editCtx.textAlign = 'center';
+                editCtx.textBaseline = 'middle';
+                editCtx.fillText('▲', mx, my + 0.5);
+            }
+
+            function drawHandle(ctx, x, y, color, label) {
+                ctx.beginPath();
+                ctx.arc(x, y, 11, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(15,23,42,0.75)';
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = color;
+                ctx.stroke();
+                ctx.fillStyle = color;
+                ctx.font = 'bold 11px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(String(label), x, y + 0.5);
+            }
+
+            function setStatus(el, text, cls) {
+                el.classList.remove('ok', 'err', 'warn');
+                if (cls) el.classList.add(cls);
+                const span = el.querySelectorAll('span')[1];
+                if (span) span.textContent = text;
+            }
+
+            /* ================= Carga de OpenCV ================= */
+            const CV_URLS = [
+                'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.3/dist/opencv.js',
+                'https://docs.opencv.org/4.9.0/opencv.js'
+            ];
+
+            function loadOpenCV() {
+                cvBox.classList.remove('hidden');
+                let i = 0;
+                (function tryNext() {
+                    if (i >= CV_URLS.length) {
+                        cvReady = false;
+                        noCvInfo.classList.remove('hidden');
+                        cvBox.classList.add('hidden');
+                        setStatus(editStatus, 'No se pudo cargar OpenCV. Usa el modo manual (✏️) para dibujar las esquinas.', 'warn');
+                        return;
+                    }
+                    const url = CV_URLS[i++];
+                    const s = document.createElement('script');
+                    s.src = url;
+                    s.onload = () => {
+                        if (window.cv) {
+                            cv = window.cv;
+                            cv.onRuntimeInitialized = () => {
+                                cvReady = true;
+                                cvBox.classList.add('hidden');
+                                if (pendingDetect) { pendingDetect = false; detect(); }
+                            };
+                        } else {
+                            s.remove();
+                            tryNext();
+                        }
+                    };
+                    s.onerror = () => { s.remove(); tryNext(); };
+                    document.head.appendChild(s);
+                })();
+            }
+            loadOpenCV();
+
+            function tryDetect() {
+                if (cvReady) detect();
+                else pendingDetect = true;
+            }
+
+            /* ================= Detección ================= */
+            function detect() {
+                if (!viewCanvas || !cvReady) return;
+                editStatus.classList.add('warn');
+                editStatus.classList.remove('ok', 'err');
+                editStatusText.textContent = 'Detectando el contorno del DNI…';
+
+                setTimeout(() => {
+                    let result = null;
+                    try {
+                        result = detectQuads(viewCanvas);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    candidates = result || [];
+
+                    if (candidates.length) {
+                        applyCorners(candidates[0].corners);
+                        renderCandChips();
+                        setStatus(editStatus, `Detectada(s) ${candidates.length} tarjeta(s) potencial(es). Arrastra las esquinas verdes si no encaja bien.`, 'ok');
+                    } else {
+                        corners = null;
+                        renderCandChips();
+                        lastCrop = null;
+                        cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
+                        setStatus(editStatus, 'No se encontró una tarjeta clara. Prueba “Detectar de nuevo”, “Bordes completos” o dibuja a mano las 4 esquinas.', 'err');
+                    }
+                    drawEditor();
+                }, 30);
+            }
+
+            // Convierte un cv.RotatedRect ({center,size,angle}) en sus 4 esquinas,
+            // equivalente a cv2.boxPoints(rect).
+            function rotatedRectPoints(rect) {
+                const angle = rect.angle * Math.PI / 180;
+                const b = Math.cos(angle) * 0.5;
+                const a = Math.sin(angle) * 0.5;
+                const cx = rect.center.x, cy = rect.center.y;
+                const w = rect.size.width, h = rect.size.height;
+                const pt0 = { x: cx - a * h - b * w, y: cy + b * h - a * w };
+                const pt1 = { x: cx + a * h - b * w, y: cy - b * h - a * w };
+                const pt2 = { x: 2 * cx - pt0.x, y: 2 * cy - pt0.y };
+                const pt3 = { x: 2 * cx - pt1.x, y: 2 * cy - pt1.y };
+                return [pt0, pt1, pt2, pt3];
+            }
+
+            function polygonArea(pts) {
+                let a = 0;
+                for (let i = 0; i < pts.length; i++) {
+                    const p1 = pts[i], p2 = pts[(i + 1) % pts.length];
+                    a += p1.x * p2.y - p2.x * p1.y;
+                }
+                return a / 2;
+            }
+
+            // Comprueba que las 4 esquinas (ya en orden TL,TR,BR,BL) formen un
+            // cuadrilátero convexo real y no uno degenerado/auto-cruzado.
+            function isConvexQuad(pts) {
+                let sign = 0;
+                for (let i = 0; i < 4; i++) {
+                    const p0 = pts[i], p1 = pts[(i + 1) % 4], p2 = pts[(i + 2) % 4];
+                    const v1 = { x: p1.x - p0.x, y: p1.y - p0.y };
+                    const v2 = { x: p2.x - p1.x, y: p2.y - p1.y };
+                    const cross = v1.x * v2.y - v1.y * v2.x;
+                    if (cross !== 0) {
+                        const s = Math.sign(cross);
+                        if (sign === 0) sign = s;
+                        else if (s !== sign) return false;
+                    }
+                }
+                return true;
+            }
+
+            function detectQuads(canvas) {
+                const src = cv.imread(canvas);
+                const gray = new cv.Mat();
+                const blurred = new cv.Mat();
+                const edges = new cv.Mat();
+                const dilated = new cv.Mat();
+                const kernel = cv.Mat.ones(5, 5, cv.CV_8U);
+                let contours = new cv.MatVector();
+                let hierarchy = new cv.Mat();
+                const res = [];
+
+                try {
+                    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+                    cv.GaussianBlur(gray, blurred, { width: 5, height: 5 }, 0);
+                    cv.Canny(blurred, edges, 50, 160);
+                    cv.dilate(edges, dilated, kernel);
+
+                    // RETR_LIST (no solo RETR_EXTERNAL): si dos DNIs quedan próximos, su
+                    // sombra/reflejo combinado puede formar un contorno exterior único que los
+                    // engloba a ambos; con RETR_EXTERNAL los contornos individuales de cada
+                    // tarjeta (contornos "hijos" de ese contorno envolvente) se pierden.
+                    cv.findContours(dilated, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+
+                    const imgArea = canvas.width * canvas.height;
+                    // Con varios DNIs en la foto cada tarjeta suele ocupar bastante área del
+                    // encuadre; subimos el mínimo para descartar contornos internos pequeños
+                    // (cara, chip, bloques de texto...) que también son rectángulos.
+                    const minArea = imgArea * 0.04;
+
+                    for (let i = 0; i < contours.size(); i++) {
+                        const cnt = contours.get(i);
+                        // Filtro previo solo para descartar ruido diminuto (rendimiento): el área
+                        // del contorno "en bruto" puede ser mucho menor que la de su casco convexo
+                        // si el contorno está deshilachado/incompleto, así que el umbral es laxo.
+                        const rawArea = cv.contourArea(cnt);
+                        if (rawArea < minArea * 0.1) { cnt.delete(); continue; }
+
+                        // En vez de exigir approxPolyDP -> exactamente 4 puntos (las esquinas
+                        // redondeadas de un DNI real casi nunca colapsan a un cuadrilátero limpio,
+                        // así que esa vía descartaba las tarjetas reales y solo dejaba pasar
+                        // rectángulos internos accidentales como la foto o el chip), ajustamos el
+                        // rectángulo rotado de área mínima (minAreaRect) al casco convexo del
+                        // contorno. Esto encuentra el mejor rectángulo aunque el contorno tenga
+                        // muchos puntos o esquinas redondeadas.
+                        const hull = new cv.Mat();
+                        try {
+                            cv.convexHull(cnt, hull, false, true);
+                            const hullArea = cv.contourArea(hull);
+                            if (hullArea >= minArea) {
+                                const rect = cv.minAreaRect(hull);
+                                // cv.dilate() con el kernel 5×5 infla el contorno ~2px hacia fuera
+                                // en cada lado antes de ajustar el rectángulo; lo compensamos aquí
+                                // para que el recuadro quede pegado al borde real de la tarjeta.
+                                const DILATE_PAD = 2;
+                                rect.size.width = Math.max(1, rect.size.width - DILATE_PAD * 2);
+                                rect.size.height = Math.max(1, rect.size.height - DILATE_PAD * 2);
+                                const w = rect.size.width, h = rect.size.height;
+                                if (w > 5 && h > 5) {
+                                    const long = Math.max(w, h), short = Math.min(w, h);
+                                    const aspect = long / short;
+                                    // ¿cuánto del rectángulo mínimo rellena el casco? filtra formas
+                                    // no rectangulares (manchas, letras en L...) que por casualidad
+                                    // tuvieran una proporción similar a la de un DNI.
+                                    const fill = hullArea / (w * h);
+                                    if (aspect > 1.3 && aspect < 1.9 && fill > 0.5) {
+                                        // minAreaRect siempre da un rectángulo perfecto, pero una
+                                        // foto con perspectiva produce un trapecio (lados no
+                                        // paralelos); sin este ajuste el recuadro queda
+                                        // sistemáticamente desencajado en fotos con perspectiva
+                                        // marcada. Ajustamos cada esquina del rectángulo al punto
+                                        // real más cercano del casco convexo del contorno.
+                                        const hullPts = [];
+                                        for (let hr = 0; hr < hull.rows; hr++) {
+                                            hullPts.push({ x: hull.data32S[hr * 2], y: hull.data32S[hr * 2 + 1] });
+                                        }
+                                        const rectPts = rotatedRectPoints(rect);
+                                        // No dejamos que una esquina "salte" más de un 15% del lado
+                                        // corto: si el casco es irregular (contorno incompleto,
+                                        // ruido...) dos esquinas del rectángulo podrían imantarse
+                                        // al mismo punto y colapsar el cuadrilátero en una línea.
+                                        const snapTol2 = (short * 0.15) ** 2;
+                                        const snapped = rectPts.map(rp => {
+                                            let best = rp, bestD = Infinity;
+                                            for (const hp of hullPts) {
+                                                const d = (hp.x - rp.x) ** 2 + (hp.y - rp.y) ** 2;
+                                                if (d < bestD) { bestD = d; best = hp; }
+                                            }
+                                            return bestD <= snapTol2 ? best : rp;
+                                        });
+                                        const snappedOrdered = orderCorners(snapped);
+                                        const snappedArea = Math.abs(polygonArea(snappedOrdered));
+                                        // Red de seguridad: si el resultado ajustado queda
+                                        // degenerado (no convexo) o pierde demasiada área respecto
+                                        // al rectángulo original, nos quedamos con el rectángulo
+                                        // "perfecto" sin ajustar en vez de arriesgar un recorte roto.
+                                        const corners = (isConvexQuad(snappedOrdered) && snappedArea >= w * h * 0.6)
+                                            ? snappedOrdered
+                                            : orderCorners(rectPts);
+                                        res.push({
+                                            corners,
+                                            area: hullArea,
+                                            aspect,
+                                            // Prioriza sobre todo el tamaño (tarjeta real >> cara/chip/
+                                            // texto internos) y en segundo lugar el parecido con la
+                                            // proporción del DNI.
+                                            score: Math.abs(aspect - ID_ASPECT) * 3 - (hullArea / imgArea) * 50
+                                        });
+                                    }
+                                }
+                            }
+                        } finally {
+                            hull.delete();
+                        }
+                        cnt.delete();
+                    }
+                } finally {
+                    src.delete(); gray.delete(); blurred.delete(); edges.delete();
+                    dilated.delete(); kernel.delete(); contours.delete(); hierarchy.delete();
+                }
+
+                res.sort((a, b) => a.score - b.score);
+
+                // quitar solapamientos (near-duplicados)
+                const out = [];
+                for (const c of res) {
+                    const centroid = centerOf(c.corners);
+                    const dup = out.some(e => {
+                        const ec = centerOf(e.corners);
+                        return Math.hypot(ec.x - centroid.x, ec.y - centroid.y) < 120;
+                    });
+                    if (!dup) out.push(c);
+                    if (out.length >= 5) break;
+                }
+                return out;
+            }
+
+            function centerOf(pts) {
+                return {
+                    x: pts.reduce((s, p) => s + p.x, 0) / 4,
+                    y: pts.reduce((s, p) => s + p.y, 0) / 4
+                };
+            }
+
+            // Reordena 4 puntos en TL, TR, BR, BL
+            function orderCorners(pts) {
+                let tl = pts[0], tr = pts[0], br = pts[0], bl = pts[0];
+                for (const p of pts) {
+                    if (p.x + p.y < tl.x + tl.y) tl = p;   // min x+y
+                    if (p.x - p.y > tr.x - tr.y) tr = p;   // max x-y  -> arriba-derecha
+                    if (p.x + p.y > br.x + br.y) br = p;   // max x+y
+                    if (p.x - p.y < bl.x - bl.y) bl = p;   // min x-y  -> abajo-izquierda
+                }
+                return [tl, tr, br, bl];
+            }
+
+            /* ================= Candidatos ================= */
+            function renderCandChips() {
+                if (!candidates.length) { candBox.classList.add('hidden'); candRow.innerHTML = ''; return; }
+                candBox.classList.remove('hidden');
+                candRow.innerHTML = '';
+                candidates.forEach((c, i) => {
+                    const chip = document.createElement('span');
+                    chip.className = 'chip' + (i === 0 ? ' active' : '');
+                    chip.textContent = `Tarjeta ${i + 1}`;
+                    chip.addEventListener('click', () => {
+                        applyCorners(c.corners);
+                        [...candRow.children].forEach((el, j) => el.classList.toggle('active', j === i));
+                        setStatus(editStatus, 'Candidato aplicado. Ajusta las esquinas si es necesario.', 'ok');
+                    });
+                    candRow.appendChild(chip);
+                });
+            }
+
+            function applyCorners(c) {
+                corners = c.map(p => ({ x: p.x * editScale(), y: p.y * editScale() }));
+                manualMode = false;
+                manualPts = [];
+                drawEditor();
+                updateCrop();
+            }
+
+            /* ================= Recorte / warp ================= */
+            function quadSideLen() {
+                const c = corners;
+                const lens = [0, 1, 2, 3].map(k => Math.hypot(c[(k + 1) % 4].x - c[k].x, c[(k + 1) % 4].y - c[k].y));
+                return Math.max(...lens);
+            }
+
+            // Desplaza cada lado del cuadrilátero (TL,TR,BR,BL) hacia dentro `insetMM`
+            // milímetros, usando los propios lados como ejes locales (funciona aunque la
+            // tarjeta esté girada/inclinada). Se usa solo como margen fijo mínimo de
+            // seguridad frente a la imprecisión de la detección (dilatación, redondeo del
+            // casco convexo...), no para simular el redondeo de las esquinas del DNI.
+            function insetQuadMM(c, insetMM) {
+                if (!insetMM) return c;
+                const [tl, tr, br, bl] = c;
+                const uLen = Math.hypot(tr.x - tl.x, tr.y - tl.y);
+                const vLen = Math.hypot(bl.x - tl.x, bl.y - tl.y);
+                if (uLen < 1 || vLen < 1) return c;
+                const uAxis = { x: (tr.x - tl.x) / uLen, y: (tr.y - tl.y) / uLen };
+                const vAxis = { x: (bl.x - tl.x) / vLen, y: (bl.y - tl.y) / vLen };
+                const insetU = insetMM * (uLen / ID_W);
+                const insetV = insetMM * (vLen / ID_H);
+                return [
+                    { x: tl.x + uAxis.x * insetU + vAxis.x * insetV, y: tl.y + uAxis.y * insetU + vAxis.y * insetV },
+                    { x: tr.x - uAxis.x * insetU + vAxis.x * insetV, y: tr.y - uAxis.y * insetU + vAxis.y * insetV },
+                    { x: br.x - uAxis.x * insetU - vAxis.x * insetV, y: br.y - uAxis.y * insetU - vAxis.y * insetV },
+                    { x: bl.x + uAxis.x * insetU - vAxis.x * insetV, y: bl.y + uAxis.y * insetU - vAxis.y * insetV }
+                ];
+            }
+
+            /* ================= Forma de las esquinas (redondas / rectas) ================= */
+            let cornerMode = 'auto';    // 'auto' | 'round' | 'square'
+            let detectedRound = null;   // resultado del último análisis automático
+
+            // Compara el color de cada esquina del recorte con un punto de referencia
+            // claramente dentro de la tarjeta, cerca del mismo borde. Si la tarjeta tiene
+            // esquinas redondeadas, el cuadrilátero recto que ajustamos se sale del
+            // material físico justo en las puntas y esa zona muestra el fondo/mesa de la
+            // foto (color muy distinto al de la tarjeta); si son rectas, el color de la
+            // esquina es prácticamente igual al del borde de la tarjeta.
+            function detectRoundCorners(canvas) {
+                const ctx = canvas.getContext('2d');
+                const w = canvas.width, h = canvas.height;
+                const probe = Math.max(3, Math.round(Math.min(w, h) * 0.018));
+                const refOff = Math.round(Math.min(w, h) * 0.14);
+
+                function avgColor(x0, y0) {
+                    const cx = Math.max(0, Math.min(w - probe, x0));
+                    const cy = Math.max(0, Math.min(h - probe, y0));
+                    const d = ctx.getImageData(cx, cy, probe, probe).data;
+                    let r = 0, g = 0, b = 0, n = 0;
+                    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+                    return { r: r / n, g: g / n, b: b / n };
+                }
+
+                const samples = [
+                    { corner: avgColor(0, 0), ref: avgColor(refOff, 2) },                              // TL
+                    { corner: avgColor(w - probe, 0), ref: avgColor(w - refOff - probe, 2) },          // TR
+                    { corner: avgColor(w - probe, h - probe), ref: avgColor(w - refOff - probe, h - probe - 2) }, // BR
+                    { corner: avgColor(0, h - probe), ref: avgColor(refOff, h - probe - 2) }           // BL
+                ];
+                let votes = 0;
+                for (const s of samples) {
+                    const dist = Math.hypot(s.corner.r - s.ref.r, s.corner.g - s.ref.g, s.corner.b - s.ref.b);
+                    if (dist > 26) votes++;
+                }
+                return votes >= 3;
+            }
+
+            function roundedRectPath(ctx, x, y, w, h, r) {
+                r = Math.max(0, Math.min(r, w / 2, h / 2));
+                ctx.beginPath();
+                ctx.moveTo(x + r, y);
+                ctx.arcTo(x + w, y, x + w, y + h, r);
+                ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r);
+                ctx.arcTo(x, y, x + w, y, r);
+                ctx.closePath();
+            }
+
+            // Recorta las esquinas del canvas con un radio real (arco), no un simple bisel
+            // recto: así el resultado imita la forma física de un DNI con esquinas
+            // redondeadas. Se rellena de blanco (no transparente) porque el recorte se
+            // reutiliza tal cual en la hoja A4 / PDF, exportados como JPEG (sin alfa).
+            function applyCornerMask(canvas, radiusPx) {
+                if (radiusPx <= 0) return canvas;
+                const w = canvas.width, h = canvas.height;
+                const out = document.createElement('canvas');
+                out.width = w; out.height = h;
+                const octx = out.getContext('2d');
+                octx.fillStyle = '#fff';
+                octx.fillRect(0, 0, w, h);
+                octx.save();
+                roundedRectPath(octx, 0, 0, w, h, radiusPx);
+                octx.clip();
+                octx.drawImage(canvas, 0, 0);
+                octx.restore();
+                return out;
+            }
+
+            function setCornerMode(mode) {
+                cornerMode = mode;
+                [cornerAuto, cornerSquare, cornerRound].forEach(el => el.classList.toggle('active', el.dataset.mode === mode));
+                updateCrop();
+            }
+            cornerAuto.addEventListener('click', () => setCornerMode('auto'));
+            cornerSquare.addEventListener('click', () => setCornerMode('square'));
+            cornerRound.addEventListener('click', () => setCornerMode('round'));
+
+            // orderCorners solo etiqueta TL/TR/BR/BL por posición (arriba-izda, etc.), no
+            // sabe cuál de los dos lados es el ancho real del DNI (85,6mm) y cuál el alto
+            // (53,98mm). En una tarjeta muy girada en la foto, el lado "TL→TR" puede acabar
+            // siendo el lado CORTO por casualidad, y el recorte queda estirado/aplastado.
+            // Aquí rotamos el orden de las esquinas para que TL→TR sea siempre el lado largo.
+            function orientForWidth(c) {
+                const len01 = Math.hypot(c[1].x - c[0].x, c[1].y - c[0].y);
+                const len12 = Math.hypot(c[2].x - c[1].x, c[2].y - c[1].y);
+                return len12 > len01 ? [c[1], c[2], c[3], c[0]] : c;
+            }
+
+            function updateCrop() {
+                if (!corners || !fullCanvas || !cvReady) return;
+                try {
+                    const oriented = orientForWidth(corners);
+                    const W = Math.min(2600, Math.max(700, Math.round(quadSideLen())));
+                    const H = Math.round(W / ID_ASPECT);
+                    // Margen fijo mínimo (no configurable) para compensar la imprecisión propia
+                    // de la detección; el redondeo real de las esquinas se resuelve aparte, con
+                    // la máscara de radio.
+                    const cropCorners = insetQuadMM(oriented, 0.3);
+
+                    const srcMat = cv.imread(fullCanvas);
+                    const src = cv.matFromArray(4, 1, cv.CV_32FC2,
+                        [cropCorners[0].x, cropCorners[0].y, cropCorners[1].x, cropCorners[1].y, cropCorners[2].x, cropCorners[2].y, cropCorners[3].x, cropCorners[3].y]);
+                    const dst = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, W, 0, W, H, 0, H]);
+                    const M = cv.getPerspectiveTransform(src, dst);
+                    const out = new cv.Mat();
+                    cv.warpPerspective(srcMat, out, M, { width: W, height: H }, cv.INTER_CUBIC,
+                        cv.BORDER_CONSTANT, new cv.Scalar(255, 255, 255, 255));
+
+                    const straight = document.createElement('canvas');
+                    straight.width = W;
+                    straight.height = H;
+                    cv.imshow(straight, out);
+                    srcMat.delete(); src.delete(); dst.delete(); M.delete(); out.delete();
+
+                    detectedRound = detectRoundCorners(straight);
+                    const effectiveRound = cornerMode === 'auto' ? detectedRound : (cornerMode === 'round');
+                    const radiusPx = effectiveRound ? (parseFloat(insetRange.value) || 0) * (W / ID_W) : 0;
+                    const c = applyCornerMask(straight, radiusPx);
+                    lastCrop = c;
+
+                    if (cornerMode === 'auto') {
+                        cornerDetected.textContent = detectedRound ? 'detectadas: redondeadas' : 'detectadas: rectas';
+                        cornerDetected.classList.toggle('green', detectedRound);
+                    } else {
+                        cornerDetected.textContent = '';
+                        cornerDetected.classList.remove('green');
+                    }
+                    insetRange.closest('.field').style.opacity = effectiveRound ? '1' : '0.45';
+                    insetRange.disabled = !effectiveRound;
+
+                    // preview
+                    const maxH = 320;
+                    const pw = Math.round(W * (maxH / H));
+                    cropCanvas.width = pw;
+                    cropCanvas.height = maxH;
+                    cropCtx.imageSmoothingQuality = 'high';
+                    cropCtx.drawImage(c, 0, 0, pw, maxH);
+
+                    setStatus(cropStatus, `Recorte listo · ${W}×${H} px · relación 1:${ID_ASPECT.toFixed(3)} · esquinas ${effectiveRound ? 'redondeadas' : 'rectas'}`, 'ok');
+                } catch (e) {
+                    console.error(e);
+                    setStatus(cropStatus, 'No se pudo calcular el recorte.', 'err');
+                }
+            }
+
+            /* ================= Interacción del editor ================= */
+            function toView(e) {
+                const r = editCanvas.getBoundingClientRect();
+                return {
+                    x: (e.clientX - r.left) * (editCanvas.width / r.width),
+                    y: (e.clientY - r.top) * (editCanvas.height / r.height)
+                };
+            }
+
+            editCanvas.addEventListener('mousedown', onDown);
+            editCanvas.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            editCanvas.addEventListener('touchstart', e => { e.preventDefault(); onDown(e.touches[0]); }, { passive: false });
+            editCanvas.addEventListener('touchmove', e => { e.preventDefault(); onMove(e.touches[0]); }, { passive: false });
+            editCanvas.addEventListener('touchend', e => { e.preventDefault(); onUp(e); }, { passive: false });
+
+            function onDown(e) {
+                const p = toView(e);
+
+                if (manualMode) {
+                    if (manualPts.length < 4) {
+                        manualPts.push(p);
+                        drawEditor();
+                        if (manualPts.length === 4) {
+                            finishManual();
+                        } else {
+                            editStatusText.textContent = `Modo manual · Punto ${manualPts.length}/4 colocado. Haz clic en la siguiente esquina.`;
+                        }
+                    }
+                    return;
+                }
+
+                if (!corners) return;
+                const pc = corners.map(c => ({ x: c.x / editScale(), y: c.y / editScale() }));
+                // ¿cerca de una esquina?
+                for (let i = 0; i < 4; i++) {
+                    const d = Math.hypot(pc[i].x - p.x, pc[i].y - p.y);
+                    const rect = editCanvas.getBoundingClientRect();
+                    const tol = Math.max(14, 14 * (editCanvas.width / rect.width));
+                    if (d <= tol) { activeIdx = i; return; }
+                }
+                // ¿dentro del polígono? -> mover toda la tarjeta
+                const inside = pointInPoly(p, pc);
+                if (inside) { activeMove = true; activeMoveStart = p; activeMoveOrig = corners.map(c => ({ ...c })); }
+            }
+
+            let activeMoveStart = null, activeMoveOrig = null;
+
+            function onMove(e) {
+                if (manualMode) return;
+                if (activeIdx >= 0 && corners) {
+                    const p = toView(e);
+                    corners[activeIdx] = clampPoint({ x: p.x * editScale(), y: p.y * editScale() });
+                    drawEditor();
+                    scheduleCropUpdate();
+                    updateLoupe(e, p);
+                } else if (activeMove && activeMoveStart && activeMoveOrig && corners) {
+                    const p = toView(e);
+                    const dX = (p.x - activeMoveStart.x) * editScale();
+                    const dY = (p.y - activeMoveStart.y) * editScale();
+                    corners = activeMoveOrig.map(c => clampPoint({ x: c.x + dX, y: c.y + dY }));
+                    drawEditor();
+                    scheduleCropUpdate();
+                    updateLoupe(e, p);
+                }
+            }
+
+            // Muestra una lupa con la zona ampliada alrededor del punto que se arrastra,
+            // desplazada respecto al dedo/cursor para que no quede tapada por él.
+            const LOUPE_ZOOM = 2.6;
+            function updateLoupe(e, viewPt) {
+                const wrapRect = imgWrap.getBoundingClientRect();
+                const canvasRect = editCanvas.getBoundingClientRect();
+                const size = loupeCanvas.width; // 140
+                const half = size / (2 * LOUPE_ZOOM);
+
+                loupeCtx.clearRect(0, 0, size, size);
+                loupeCtx.save();
+                loupeCtx.beginPath();
+                loupeCtx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+                loupeCtx.clip();
+                loupeCtx.fillStyle = '#fff';
+                loupeCtx.fillRect(0, 0, size, size);
+                loupeCtx.drawImage(
+                    viewCanvas,
+                    viewPt.x - half, viewPt.y - half, half * 2, half * 2,
+                    0, 0, size, size
+                );
+
+                // Dibuja los lados y las otras esquinas del cuadrilátero dentro de la lupa
+                // (en las mismas coordenadas ampliadas), para poder encajar la esquina que
+                // se arrastra justo sobre el borde real de la tarjeta en vez de ir a ojo.
+                if (corners && corners.length === 4) {
+                    const pc = corners.map(c => ({ x: c.x / editScale(), y: c.y / editScale() }));
+                    const toLoupe = p => ({
+                        x: (p.x - (viewPt.x - half)) * LOUPE_ZOOM,
+                        y: (p.y - (viewPt.y - half)) * LOUPE_ZOOM
+                    });
+                    const lp = pc.map(toLoupe);
+                    loupeCtx.lineWidth = 2;
+                    loupeCtx.strokeStyle = '#2dd4bf';
+                    loupeCtx.beginPath();
+                    loupeCtx.moveTo(lp[0].x, lp[0].y);
+                    for (let i = 1; i < 4; i++) loupeCtx.lineTo(lp[i].x, lp[i].y);
+                    loupeCtx.closePath();
+                    loupeCtx.stroke();
+                    lp.forEach((p, i) => {
+                        if (i === activeIdx) return; // esa es la que se está moviendo (retícula)
+                        loupeCtx.beginPath();
+                        loupeCtx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+                        loupeCtx.fillStyle = '#2dd4bf';
+                        loupeCtx.fill();
+                        loupeCtx.strokeStyle = 'rgba(15,23,42,0.8)';
+                        loupeCtx.lineWidth = 1;
+                        loupeCtx.stroke();
+                    });
+                }
+
+                // retícula central: marca exactamente el punto que se está colocando
+                loupeCtx.strokeStyle = 'rgba(236,72,153,0.9)';
+                loupeCtx.lineWidth = 1.5;
+                loupeCtx.beginPath();
+                loupeCtx.moveTo(size / 2 - 10, size / 2); loupeCtx.lineTo(size / 2 + 10, size / 2);
+                loupeCtx.moveTo(size / 2, size / 2 - 10); loupeCtx.lineTo(size / 2, size / 2 + 10);
+                loupeCtx.stroke();
+                loupeCtx.restore();
+
+                // posición: encima del dedo/cursor, centrada horizontalmente sobre él;
+                // si no cabe arriba (cerca del borde superior), se coloca debajo.
+                const cx = e.clientX - wrapRect.left;
+                const cy = e.clientY - wrapRect.top;
+                const margin = 14;
+                let left = cx - size / 2;
+                left = Math.max(margin, Math.min(wrapRect.width - size - margin, left));
+                let top = cy - size - 40; // encima del punto tocado
+                if (top < margin) top = cy + 40; // si no cabe arriba, mostrar debajo
+                loupeCanvas.style.left = `${left}px`;
+                loupeCanvas.style.top = `${top}px`;
+                loupeCanvas.style.display = 'block';
+            }
+
+            function hideLoupe() {
+                loupeCanvas.style.display = 'none';
+            }
+
+            let cropTick = false;
+            function scheduleCropUpdate() {
+                if (cropTick) return;
+                cropTick = true;
+                requestAnimationFrame(() => {
+                    cropTick = false;
+                    updateCrop();
+                });
+            }
+
+            function onUp() {
+                activeIdx = -1;
+                activeMove = false;
+                activeMoveStart = null;
+                activeMoveOrig = null;
+                hideLoupe();
+            }
+
+            function clampPoint(p) {
+                return {
+                    x: Math.max(0, Math.min(fullCanvas.width, Math.round(p.x))),
+                    y: Math.max(0, Math.min(fullCanvas.height, Math.round(p.y)))
+                };
+            }
+
+            function pointInPoly(p, poly) {
+                let inside = false;
+                for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+                    const xi = poly[i].x, yi = poly[i].y, xj = poly[j].x, yj = poly[j].y;
+                    if ((yi > p.y) !== (yj > p.y) && p.x < (xj - xi) * (p.y - yi) / (yj - yi) + xi) inside = !inside;
+                }
+                return inside;
+            }
+
+            // Botones
+            $('btnDetect').addEventListener('click', () => {
+                if (!cvReady) { setStatus(editStatus, 'OpenCV todavía no está listo…', 'warn'); return; }
+                manualMode = false;
+                manualPts = [];
+                detect();
+            });
+            $('btnManual').addEventListener('click', () => {
+                manualMode = true;
+                manualPts = [];
+                corners = null;
+                lastCrop = null;
+                setStatus(editStatus, 'Modo manual · Haz clic en la primera esquina del DNI (arriba-izquierda).', 'warn');
+                drawEditor();
+            });
+            $('btnUndo').addEventListener('click', () => {
+                if (manualMode && manualPts.length) {
+                    manualPts.pop();
+                    editStatusText.textContent = manualPts.length
+                        ? `Modo manual · Punto ${manualPts.length}/4 colocado.`
+                        : 'Modo manual · haz clic en la primera esquina.';
+                    drawEditor();
+                }
+            });
+            $('btnReset').addEventListener('click', () => {
+                corners = [
+                    { x: 0, y: 0 },
+                    { x: fullCanvas.width, y: 0 },
+                    { x: fullCanvas.width, y: fullCanvas.height },
+                    { x: 0, y: fullCanvas.height }
+                ];
+                manualMode = false;
+                manualPts = [];
+                drawEditor();
+                updateCrop();
+                setStatus(editStatus, 'Seleccionada toda la imagen. Ajusta las esquinas para ceñirte al DNI.', 'warn');
+            });
+
+            $('btnRotL').addEventListener('click', () => rotateImage(-90));
+            $('btnRotR').addEventListener('click', () => rotateImage(90));
+
+            function rotateCanvas90(src, deg) {
+                const c = document.createElement('canvas');
+                c.width = src.height;
+                c.height = src.width;
+                const ctx = c.getContext('2d');
+                ctx.translate(c.width / 2, c.height / 2);
+                ctx.rotate(deg * Math.PI / 180);
+                ctx.drawImage(src, -src.width / 2, -src.height / 2);
+                return c;
+            }
+
+            function rotateImage(deg) {
+                if (!fullCanvas) return;
+                fullCanvas = rotateCanvas90(fullCanvas, deg);
+                viewCanvas = downscale(fullCanvas, MAX_EDIT);
+                corners = null;
+                candidates = [];
+                manualPts = [];
+                manualMode = false;
+                lastCrop = null;
+                cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
+                setStatus(cropStatus, 'Sin recorte aún.', '');
+                fitView();
+                setStatus(editStatus, 'Imagen girada, detectando tarjeta…', '');
+                tryDetect();
+            }
+
+            function finishManual() {
+                const s = editScale();
+                corners = manualPts.map(p => clampPoint({ x: p.x * s, y: p.y * s }));
+                manualMode = false;
+                manualPts = [];
+                drawEditor();
+                updateCrop();
+                setStatus(editStatus, 'Esquinas colocadas. Arrastra los puntos verdes para afinar.', 'ok');
+            }
+
+            /* ================= Hoja A4 ================= */
+            $('btnAdd').addEventListener('click', () => {
+                if (!lastCrop) {
+                    setStatus(cropStatus, 'Primero debes tener un recorte válido (detección o modo manual).', 'err');
+                    return;
+                }
+                const cap = lastCrop; // conservamos referencia estable
+                const dataURL = canvasToJpegDataURL(cap, 0.95);
+                sheetDnis.push({ canvas: cap, dataURL });
+                sheetCard.classList.remove('hidden');
+                curPage = 0;
+                renderSheet();
+            });
+
+            $('btnClear').addEventListener('click', () => {
+                sheetDnis = [];
+                pages = [];
+                curPage = 0;
+                renderSheet();
+            });
+
+            insetRange.addEventListener('input', () => {
+                insetVal.textContent = parseFloat(insetRange.value).toFixed(1);
+                updateCrop();
+            });
+
+            $('btnDlCrop').addEventListener('click', () => {
+                if (!lastCrop) return;
+                lastCrop.toBlob(b => downloadBlob(b, 'dni_recortado.png'), 'image/png');
+            });
+
+            dpiSelect.addEventListener('change', renderSheet);
+            guideCheck.addEventListener('change', renderSheet);
+            borderCheck.addEventListener('change', renderSheet);
+            pagePrev.addEventListener('click', () => { if (curPage > 0) { curPage--; showPage(); } });
+            pageNext.addEventListener('click', () => { if (curPage < pages.length - 1) { curPage++; showPage(); } });
+
+            function canvasToJpegDataURL(c, q) {
+                return c.toDataURL('image/jpeg', q);
+            }
+
+            function mm2px(mm, dpi) { return Math.round(mm / MM_IN * dpi); }
+
+            function layoutItems(dpi) {
+                // posiciones en px
+                const W = mm2px(A4_W, dpi), H = mm2px(A4_H, dpi);
+                const cardWpx = mm2px(ID_W, dpi), cardHpx = mm2px(ID_H, dpi);
+                const mpx = mm2px(SHEET_MARGIN, dpi), gpx = mm2px(SHEET_GAP, dpi);
+
+                const cols = Math.max(1, Math.floor((W - 2 * mpx + gpx) / (cardWpx + gpx)));
+                const rowsPerPage = Math.max(1, Math.floor((H - 2 * mpx + gpx) / (cardHpx + gpx)));
+                const perPage = cols * rowsPerPage;
+                const n = sheetDnis.length;
+
+                pages = [];
+                for (let p = 0; p < Math.ceil(n / perPage); p++) {
+                    const items = [];
+                    const pageN = sheetDnis.slice(p * perPage, (p + 1) * perPage);
+                    pageN.forEach((d, idx) => {
+                        const r = Math.floor(idx / cols);
+                        const c = idx % cols;
+                        const cellW = (W - 2 * mpx - (cols - 1) * gpx) / cols;
+                        const cellH = (H - 2 * mpx - (rowsPerPage - 1) * gpx) / rowsPerPage;
+                        const x = Math.round(mpx + c * (cellW + gpx) + (cellW - cardWpx) / 2);
+                        const y = Math.round(mpx + r * (cellH + gpx) + (cellH - cardHpx) / 2);
+                        items.push({ x, y, w: cardWpx, h: cardHpx, item: d });
+                    });
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = W;
+                    canvas.height = H;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, W, H);
+                    for (const it of items) {
+                        ctx.imageSmoothingQuality = 'high';
+                        ctx.drawImage(it.item.canvas, it.x, it.y, it.w, it.h);
+                        if (borderCheck.checked) {
+                            ctx.strokeStyle = '#333';
+                            ctx.lineWidth = Math.max(1, Math.round(mm2px(0.3, dpi)));
+                            ctx.strokeRect(it.x, it.y, it.w, it.h);
+                        }
+                        if (guideCheck.checked) {
+                            const off = mm2px(3, dpi);
+                            ctx.save();
+                            ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+                            ctx.lineWidth = 1;
+                            ctx.setLineDash([6, 5]);
+                            ctx.strokeRect(it.x - off, it.y - off, it.w + 2 * off, it.h + 2 * off);
+                            ctx.restore();
+                        }
+                    }
+                    pages.push({ canvas, items });
+                }
+            }
+
+            function renderSheet() {
+                if (!sheetDnis.length) {
+                    sheetWrap.classList.remove('hidden');
+                    sheetWrap.className = 'empty-sheet';
+                    sheetWrap.innerHTML = 'Todavía no has añadido ningún DNI. Vuelve al paso 2 y pulsa <strong>“Añadir a la hoja A4”</strong>.';
+                    sheetCount.textContent = '0 DNI en la hoja';
+                    return;
+                }
+                layoutItems(parseInt(dpiSelect.value, 10));
+                curPage = Math.min(curPage, pages.length - 1);
+                sheetCount.textContent = `${sheetDnis.length} DNI en la hoja · ${pages.length} página(s)`;
+                sheetDpi.textContent = `${dpiSelect.value} ppp`;
+                showPage();
+            }
+
+            function showPage() {
+                if (!pages.length) return;
+                const p = pages[curPage];
+                sheetWrap.className = '';
+                sheetWrap.classList.remove('empty-sheet');
+                sheetWrap.innerHTML = '';
+                const img = document.createElement('canvas');
+                img.className = 'sheet';
+                img.width = p.canvas.width;
+                img.height = p.canvas.height;
+                const ctx = img.getContext('2d');
+                ctx.drawImage(p.canvas, 0, 0);
+                sheetWrap.appendChild(img);
+                pageInfo.textContent = `Página ${curPage + 1} / ${pages.length}`;
+                pagePrev.disabled = curPage === 0;
+                pageNext.disabled = curPage === pages.length - 1;
+            }
+
+            /* ================= Descargas ================= */
+            $('btnPng').addEventListener('click', () => {
+                if (!pages.length) return;
+                pages[curPage].canvas.toBlob(b => downloadBlob(b, `dni_hoja_a4_pag${curPage + 1}_${dpiSelect.value}ppp.png`), 'image/png');
+            });
+
+            $('btnPdf').addEventListener('click', () => buildPdf(false));
+            $('btnPrint').addEventListener('click', () => buildPdf(true));
+
+            function buildPdf(openTab) {
+                if (!pages.length) { alert('Añade al menos un DNI a la hoja primero.'); return; }
+                if (!window.jspdf) { alert('La librería PDF no está disponible ahora mismo.'); return; }
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+                pages.forEach((p, pi) => {
+                    if (pi > 0) doc.addPage('a4', 'portrait');
+                    doc.setFillColor(255, 255, 255);
+                    doc.rect(0, 0, A4_W, A4_H, 'F');
+                    for (const it of p.items) {
+                        const x = it.x / p.canvas.width * A4_W;
+                        const y = it.y / p.canvas.height * A4_H;
+                        const w = it.w / p.canvas.width * A4_W;
+                        const h = it.h / p.canvas.height * A4_H;
+                        doc.addImage(it.item.dataURL, 'JPEG', x, y, w, h);
+                        if (guideCheck.checked) {
+                            const off = 3;
+                            doc.setDrawColor(120, 120, 120);
+                            doc.setLineWidth(0.2);
+                            doc.setLineDashPattern([2, 2], 0);
+                            doc.rect(x - off, y - off, w + 2 * off, h + 2 * off);
+                            doc.setLineDashPattern([], 0);
+                        }
+                        if (borderCheck.checked) {
+                            doc.setDrawColor(0, 0, 0);
+                            doc.setLineWidth(0.28);
+                            doc.rect(x, y, w, h);
+                        }
+                    }
+                });
+
+                if (openTab) {
+                    const url = doc.output('bloburl');
+                    window.open(url, '_blank');
+                } else {
+                    doc.save('dni_impresion_tamano_real.pdf');
+                }
+            }
+
+            function downloadBlob(blob, name) {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = name;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+            }
+
+            /* ================= Imagen de ejemplo ================= */
+            function loadSample() {
+                const w = 1400, h = 933;
+                const c = document.createElement('canvas');
+                c.width = w; c.height = h;
+                const ctx = c.getContext('2d');
+
+                // fondo suave tipo "escritorio"
+                const g = ctx.createLinearGradient(0, 0, w, h);
+                g.addColorStop(0, '#cfd8e1');
+                g.addColorStop(1, '#7b8794');
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, w, h);
+
+                // viñeta / sombreado suave (sin bordes duros)
+                const rg = ctx.createRadialGradient(w * 0.5, h * 0.5, 80, w * 0.5, h * 0.5, Math.max(w, h) * 0.72);
+                rg.addColorStop(0, 'rgba(255,255,255,0.12)');
+                rg.addColorStop(1, 'rgba(15,23,42,0.32)');
+                ctx.fillStyle = rg;
+                ctx.fillRect(0, 0, w, h);
+
+                // dos tarjetas de ejemplo bien separadas
+                drawExampleCard(ctx, w * 0.54, h * 0.58, 620, -0.06, 0.05);
+                drawExampleCard(ctx, w * 0.17, h * 0.20, 330, 0.18, -0.04);
+
+                const url = c.toDataURL('image/png');
+                const img = new Image();
+                img.onload = () => setupImage(img);
+                img.src = url;
+            }
+
+            function drawExampleCard(ctx, cx, cy, idw, angle, shearX) {
+                const idh = idw / ID_ASPECT;
+                const ctxc = document.createElement('canvas');
+                ctxc.width = idw; ctxc.height = Math.round(idh);
+                const c2 = ctxc.getContext('2d');
+
+                c2.fillStyle = '#f4f4f2';
+                c2.fillRect(0, 0, ctxc.width, ctxc.height);
+                // banda superior
+                c2.fillStyle = '#d92b2b';
+                c2.fillRect(0, 0, ctxc.width, Math.round(idh * 0.16));
+                c2.fillStyle = '#fff';
+                c2.font = `700 ${Math.round(idh * 0.09)}px Inter, sans-serif`;
+                c2.textBaseline = 'middle';
+                c2.fillText('ESPAÑA', 40, Math.round(idh * 0.08) + 4);
+                // bandera
+                c2.fillStyle = '#ffc400';
+                c2.fillRect(ctxc.width - 120, Math.round(idh * 0.018), 20, Math.round(idh * 0.12));
+                c2.fillStyle = '#d92b2b';
+                c2.fillRect(ctxc.width - 98, Math.round(idh * 0.018), 60, Math.round(idh * 0.12));
+
+                // foto simulada
+                c2.fillStyle = '#d7d5cf';
+                c2.fillRect(36, Math.round(idh * 0.24), 150, 190);
+                c2.fillStyle = '#b3aea1';
+                c2.beginPath();
+                c2.arc(36 + 75, 110, 48, 0, Math.PI * 2);
+                c2.fill();
+                c2.fillStyle = '#30282a';
+                c2.beginPath();
+                c2.arc(36 + 75, 96, 26, 0, Math.PI * 2);
+                c2.fill();
+                c2.fillStyle = '#a39887';
+                c2.beginPath();
+                c2.moveTo(46, 200); c2.lineTo(176, 200); c2.lineTo(156, 240); c2.lineTo(66, 240);
+                c2.closePath(); c2.fill();
+
+                c2.fillStyle = '#1c1917';
+                c2.font = `600 ${Math.round(idw * 0.038)}px Inter, sans-serif`;
+                c2.textAlign = 'left';
+                c2.fillText('42345678Z', Math.round(idw * 0.32), Math.round(idh * 0.28));
+                c2.font = `400 ${Math.round(idw * 0.026)}px Inter, sans-serif`;
+                c2.fillText('SANCHEZ GARCIA, MARIA', Math.round(idw * 0.32), Math.round(idh * 0.4));
+                c2.fillText('C/ LOS OLMOS 12, 28002 MADRID', Math.round(idw * 0.32), Math.round(idh * 0.5));
+                c2.fillText('Especialidad: PROGRAMACION', Math.round(idw * 0.32), Math.round(idh * 0.62));
+                c2.fillText('Validez: HASTA CADUCIDAD', Math.round(idw * 0.32), Math.round(idh * 0.74));
+
+                c2.fillStyle = '#e8e7e2';
+                c2.fillRect(0, Math.round(idh * 0.84), ctxc.width, Math.round(idh * 0.16));
+                c2.font = `500 ${Math.round(idw * 0.032)}px 'Courier New', monospace`;
+                c2.fillStyle = '#222';
+                c2.fillText('<I<ESPSANCHEZ<GARCIA<MARIA<<<<', Math.round(idw * 0.04), Math.round(idh * 0.9));
+                c2.fillText('42345678Z1ESP861234M2802145<<', Math.round(idw * 0.04), Math.round(idh * 0.965));
+
+                // dibujar con rotación + sesgo (asimila a una foto)
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(angle);
+                ctx.transform(1, 0, shearX, 1, 0, 0);
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(ctxc, -idw / 2, -idh / 2, idw, idh);
+                ctx.restore();
+            }
+        })();
+    </script>
+</body>
+
+</html>
