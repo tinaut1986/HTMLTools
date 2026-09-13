@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouse Tester - Diagnóstico de Ratón & Chatter</title>
+  <link rel="icon" href="favicon.ico" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="../index.html" class="btn-back" title="Volver a la lista de herramientas">
+        <i data-lucide="arrow-left"></i> Herramientas
+      </a>
+      <div class="header-title">
+        <h1>🖱️ Mouse Tester & Diagnóstico de Chatter</h1>
+        <span class="badge badge-info">Hardware Diagnostic</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btn-copy-log" class="btn" title="Copiar últimos eventos al portapapeles">
+        <i data-lucide="clipboard-copy"></i> Copiar Log
+      </button>
+      <button id="btn-export-csv" class="btn btn-primary" title="Descargar registro en CSV">
+        <i data-lucide="file-spreadsheet"></i> Exportar CSV
+      </button>
+      <button id="btn-export-json" class="btn" title="Descargar registro en JSON">
+        <i data-lucide="file-json"></i> JSON
+      </button>
+      <button id="btn-clear-log" class="btn btn-danger" title="Reiniciar estadísticas y limpiar tabla">
+        <i data-lucide="trash-2"></i> Limpiar
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card info">
+        <span class="stat-label">Total Clics Registrados</span>
+        <span class="stat-value" id="stat-clicks">0</span>
+      </div>
+      <div class="stat-card" id="card-chatter">
+        <span class="stat-label">Anomalías / Chatter Detectados</span>
+        <span class="stat-value" id="stat-chatter">0</span>
+      </div>
+      <div class="stat-card success">
+        <span class="stat-label">Mayor Tiempo Mantenido</span>
+        <span class="stat-value" id="stat-max-hold">0.00 s</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Menor Intervalo (Gap)</span>
+        <span class="stat-value" id="stat-min-gap">0 ms</span>
+      </div>
+    </div>
+
+    <!-- Left Column: Testing Areas -->
+    <div class="test-section">
+      <!-- Hold Test Pad -->
+      <div id="test-pad" class="test-pad" tabindex="0">
+        <div class="pad-icon">🎯</div>
+        <h2 class="pad-title">Zona de Prueba de Pulsación Continua (Hold Test)</h2>
+        <p class="pad-subtitle">
+          Mantén presionado el botón que sospechas que falla (clic izquierdo, derecho, etc.). Si el microswitch tiembla o se desconecta solo, sonará una alarma y se marcará en rojo de inmediato.
+        </p>
+
+        <div class="hold-timer-display">
+          <div class="timer-value" id="timer-value">0.000 s</div>
+          <div class="timer-bar-container">
+            <div class="timer-bar" id="timer-bar"></div>
+          </div>
+        </div>
+
+        <div id="status-banner" class="status-banner"></div>
+      </div>
+
+      <!-- Drag & Drop Playground -->
+      <div class="drag-playground">
+        <div class="drag-header">
+          <h3>📦 Prueba de Arrastre Continuo (Drag & Drop Test)</h3>
+          <span class="drag-instruction">Arrastra la caja sin soltar para comprobar si se "cae" sola</span>
+        </div>
+        <div class="drag-canvas-area" id="drag-canvas-area">
+          <div class="draggable-item" id="drag-item" style="left: calc(50% - 90px); top: calc(50% - 20px);">
+            ✋ Mantén y arrástrame
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Visualizer & Settings -->
+    <div class="sidebar">
+      <!-- Mouse SVG Visualizer -->
+      <div class="panel-card">
+        <h3 class="panel-title">Visualizador de Botones en Tiempo Real</h3>
+        <div class="mouse-visualizer">
+          <svg class="mouse-svg" viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
+            <!-- Mouse Body Base -->
+            <path class="mouse-part mouse-body" d="M 60 10 C 20 10 15 50 15 110 C 15 155 35 175 60 175 C 85 175 105 155 105 110 C 105 50 100 10 60 10 Z" />
+            
+            <!-- Left Button -->
+            <path id="btn-left" class="mouse-part" d="M 58 12 C 30 13 22 35 22 75 L 58 75 Z" />
+            
+            <!-- Right Button -->
+            <path id="btn-right" class="mouse-part" d="M 62 12 C 90 13 98 35 98 75 L 62 75 Z" />
+            
+            <!-- Scroll Wheel / Middle Button -->
+            <rect id="btn-middle" class="mouse-part" x="55" y="28" width="10" height="28" rx="5" />
+            
+            <!-- Side Button 4 (Back) -->
+            <path id="btn-back" class="mouse-part" d="M 12 85 C 10 92 10 100 12 107 L 17 104 L 17 88 Z" />
+            
+            <!-- Side Button 5 (Forward) -->
+            <path id="btn-forward" class="mouse-part" d="M 13 65 C 11 72 11 80 13 83 L 18 80 L 18 68 Z" />
+          </svg>
+
+          <div class="buttons-legend">
+            <div class="legend-item"><span class="legend-color" id="leg-lmb"></span> Clic Izquierdo (0)</div>
+            <div class="legend-item"><span class="legend-color" id="leg-rmb"></span> Clic Derecho (2)</div>
+            <div class="legend-item"><span class="legend-color" id="leg-mmb"></span> Rueda / Medio (1)</div>
+            <div class="legend-item"><span class="legend-color" id="leg-side"></span> Botones Laterales</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings & Diagnostic Rules -->
+      <div class="panel-card">
+        <h3 class="panel-title">Ajustes de Detección</h3>
+        <div class="settings-list">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span>Umbral de Rebote (Chatter)</span>
+              <small>Intervalos menores se consideran fallo del switch</small>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <input type="range" id="chatter-threshold" class="slider-range" min="20" max="150" value="75" step="5">
+              <span id="threshold-val" style="font-family: var(--font-mono); font-size: 0.8rem; min-width: 45px;">75ms</span>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span>Alertas Sonoras</span>
+              <small>Tono disonante si hay rebote o liberación involuntaria</small>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-sound" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-label">
+              <span>Bloquear Menú Contextual</span>
+              <small>Permite probar el clic derecho sin abrir el menú</small>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-context-menu" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem; padding: 0.75rem; background: rgba(45, 212, 191, 0.08); border-left: 3px solid #2dd4bf; border-radius: 0.25rem; font-size: 0.78rem; color: #99f6e4;">
+          💡 <b>¿Por qué ocurre este fallo?</b><br>
+          En los ratones mecánicos (como Logitech con switches Omron), la lámina de cobre pierde elasticidad o acumula óxido microscópico, provocando que la señal eléctrica se interrumpa durante microsegundos al mantenerlo presionado.
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Comprehensive Event Log -->
+    <div class="log-section">
+      <div class="log-header">
+        <div class="log-title-area">
+          <h3>📜 Registro de Eventos en Tiempo Real</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.08); color: #cbd5e1;">Precisión en ms</span>
+        </div>
+        <div class="log-filters">
+          <button class="filter-chip active" data-filter="all">Todos</button>
+          <button class="filter-chip" data-filter="chatter">Solo Chatter / Anomalías</button>
+          <button class="filter-chip" data-filter="lmb">Solo Clic Izquierdo</button>
+          <button class="filter-chip" data-filter="rmb">Solo Clic Derecho</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 140px;">Hora (ms)</th>
+              <th style="width: 120px;">Evento</th>
+              <th style="width: 160px;">Botón</th>
+              <th style="width: 140px;">Mantenido</th>
+              <th style="width: 140px;">Intervalo (Gap)</th>
+              <th style="width: 130px;">Estado</th>
+              <th>Detalles</th>
+            </tr>
+          </thead>
+          <tbody id="log-table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+        <div id="empty-log" class="empty-log">
+          Pulsa o mantén pulsado cualquier botón del ratón en la zona superior para comenzar el registro.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast">
+    <span>ℹ️</span>
+    <span id="toast-msg">Mensaje de notificación</span>
+  </div>
+
+  <footer>
+    <p>HTMLTools &bull; Mouse Diagnostic & Chatter Tester &bull; 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
